@@ -1,0 +1,52 @@
+{
+  "name": "harmonypay-gateway",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An example project for NextAuth.js using Typescript",
+  "repository": "https://github.com/nextauthjs/next-auth-typescript-example.git",
+  "bugs": {
+    "url": "https://github.com/nextauthjs/next-auth/issues"
+  },
+  "homepage": "http://next-auth-typescript-example.now.sh",
+  "main": "",
+  "scripts": {
+    "dev": "next -H 0.0.0.0 -p 3033",
+    "build": "next build",
+    "start": "next -H 0.0.0.0 -p 3033",
+    "types": "tsc --noEmit"
+  },
+  "author": "Carlos Guimarães <sekmet@open4g.com>",
+  "license": "ISC",
+  "prettier": {
+    "semi": false
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.4.0",
+    "@heroicons/react": "^1.0.3",
+    "@tailwindcss/forms": "^0.3.3",
+    "@woocommerce/woocommerce-rest-api": "^1.0.1",
+    "axios": "^0.21.1",
+    "dayjs": "^1.10.6",
+    "dotenv": "^10.0.0",
+    "envfile": "^6.17.0",
+    "next": "^11.0.0",
+    "next-auth": "latest",
+    "pg": "^8.7.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-hook-form": "^7.12.2",
+    "sqlite3": "^5.0.2",
+    "sweetalert2": "^11.1.2",
+    "swr": "^0.5.6"
+  },
+  "devDependencies": {
+    "@types/node": "^15.12.4",
+    "@types/react": "^17.0.11",
+    "@types/react-dom": "^17.0.8",
+    "@types/woocommerce__woocommerce-rest-api": "^1.0.2",
+    "autoprefixer": "^10.3.1",
+    "postcss": "^8.3.5",
+    "tailwindcss": "^2.2.4",
+    "typescript": "^4.3.4"
+  }
+}
