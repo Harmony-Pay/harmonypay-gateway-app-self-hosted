@@ -54,7 +54,6 @@ Cryptocurrency payment gateway for WooCommerce and Easy Digital Downloads. Recei
 
 HarmonyPay is an easy to implement, cryptocurrency payment gateway for WooCommerce and Easy Digital Downloads. Accept Harmony ONE and HRC20 Tokens. Peer-to-peer transactions.
 
-Go to [next-auth.js.org](https://next-auth.js.org) for more information and documentation.
 
 # Getting Started
 
@@ -79,8 +78,6 @@ npm install
 ```sh
 npm run dev
 ```
-
-[![Run development enviroment](https://asciinema.org/a/391634.svg)](https://asciinema.org/a/391634)
 
 ### Or production enviroment
 
