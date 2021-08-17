@@ -1,38 +1,62 @@
 <p align="center">
    <br/>
-   <a href="https://next-auth.js.org" target="_blank"><img width="150px" src="https://next-auth.js.org/img/logo/logo-sm.png" /></a>
-   <h3 align="center">HarmonyPay  <img src="/docs/ONE.svg" width="40" height="24" alt="TypeScript logo"/> Example App</h3>
+   <a href="https://harmonypay.open4g.com/" target="_blank"><img width="150px" src="https://github.com/sekmet/harmonypay-gateway/raw/main/docs/ONE.svg" /></a>
+   <h3 align="center">HarmonyPay - Payment Gateway</h3>
    <p align="center">
-   Open Source. Full Stack. Own Your Data.
+   Accept Harmony ONE and HRC20 Tokens. Peer-to-peer transactions.
    </p>
-   <p align="center" style="align: center;">
-      <a href="https://npm.im/next-auth">
-        <img alt="npm" src="https://img.shields.io/npm/v/next-auth?color=green&label=next-auth">
-      </a>
-      <a href="https://bundlephobia.com/result?p=next-auth-example">
-        <img src="https://img.shields.io/bundlephobia/minzip/next-auth?label=next-auth" alt="Bundle Size"/>
-      </a>
-      <a href="https://www.npmtrends.com/next-auth">
-        <img src="https://img.shields.io/npm/dm/next-auth?label=next-auth%20downloads" alt="Downloads" />
-      </a>
-   </p>
+
 </p>
 
 ## Overview
 
-This is an example of how to use the [NextAuth.js](https://next-auth.js.org) library to add authentication to a [Next.js](https://nextjs.org) application with Typescript.
+## HarmonyPay Gateway Application - Accept Harmony ONE and HRC20 tokens
 
-Check out the TypeScript [documentation](https://next-auth.js.org/getting-started/typescript).
+### IN PROGRESS
 
-This example application can be found under [`next-auth-typescript-example.vercel.app`](https://next-auth-typescript-example.vercel.app)
+Cryptocurrency payment gateway for WooCommerce and Easy Digital Downloads. Accept Harmony ONE and HRC20 Tokens. Peer-to-peer transactions.
 
-### About NextAuth.js
+### Description
 
-NextAuth.js is an easy to implement, full-stack (client/server) open source authentication library designed for [Next.js](https://nextjs.org) and [Serverless](https://vercel.com).
+Cryptocurrency payment gateway for WooCommerce and Easy Digital Downloads. Receive coins directly into the wallet of your choice.
+
+
+### Key Features & Highlights
+
+- 0% transaction fees
+- No KYC or product restrictions
+- Peer-to-peer transactions
+- No redirection to 3rd parties or iframes
+- Use any crypto wallet you want
+- Automagically detect unique payments using one wallet address
+- Hierarchically deterministic (HD) wallet support
+- 1-Click payment buttons, MetaMask, Waves Client, etc.
+- Fiat autosettlement enables you to connect to exchange(s) and instantly convert selected coins to fiat or stablecoins
+- Donations widget shortcode generator
+- Tor support
+- 0-conf (mempool) support for some coins
+- Take MCC for a test ride by visiting our <a href="https://harmonypay.open4g.com/">Demo Store</a>
+
+
+### eCommerce platforms supported
+
+- Easy Digital Downloads
+- WooCommerce
+
+### Cryptocurrencies supported
+
+- Harmony ONE
+- HRC20 Tokens
+- Custom HRC20 Tokens
+
+
+### About HarmonyPay
+
+HarmonyPay is an easy to implement, full-stack (client/server) open source authentication library designed for [Next.js](https://nextjs.org) and [Serverless](https://vercel.com).
 
 Go to [next-auth.js.org](https://next-auth.js.org) for more information and documentation.
 
-> *NextAuth.js is not associated with Vercel or Next.js.*
+> *HarmonyPay is not associated with Vercel or Next.js.*
 
 ## Getting Started
 
@@ -56,7 +80,7 @@ Add details for one or more providers (e.g. Google, Twitter, GitHub, Email, etc)
 
 #### Database
 
-A database is needed to persist user accounts and to support email sign in. However, you can still use NextAuth.js for authentication without a database by using OAuth for authentication. If you do not specify a database, [JSON Web Tokens](https://jwt.io/introduction) will be enabled by default.
+A database is needed to persist user accounts and to support email sign in. However, you can still use HarmonyPay for authentication without a database by using OAuth for authentication. If you do not specify a database, [JSON Web Tokens](https://jwt.io/introduction) will be enabled by default.
 
 You **can** skip configuring a database and come back to it later if you want.
 
@@ -111,7 +135,7 @@ Do not forget to set the environment variables for the Client ID and Client Secr
 <a href="https://vercel.com?utm_source=nextauthjs&utm_campaign=oss">
 <img width="170px" src="https://raw.githubusercontent.com/nextauthjs/next-auth/canary/www/static/img/powered-by-vercel.svg" alt="Powered By Vercel" />
 </a>
-<p align="left">Thanks to Vercel sponsoring this project by allowing it to be deployed for free for the entire NextAuth.js Team</p>
+<p align="left">Thanks to Vercel sponsoring this project by allowing it to be deployed for free for the entire HarmonyPay Team</p>
 
 ## License
 
