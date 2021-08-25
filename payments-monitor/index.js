@@ -10,8 +10,9 @@ const { fromBech32, toBech32, BN } = require('@harmony-js/crypto');
 
 
 dotenv.config();
-const http_api_url = process.env.NODE_ENV === 'development' ? 'https://api.s0.b.hmny.io' : 'https://api.harmony.one';
-const ws_api_url = process.env.NODE_ENV === 'development' ? 'wss://ws.s0.b.hmny.io' : 'wss://ws.s0.t.hmny.io';
+const network_mode = process.env.NETWORK_MODE || 'testnet'
+const http_api_url = network_mode === 'testnet' ? 'https://api.s0.b.hmny.io' : 'https://api.harmony.one';
+const ws_api_url = network_mode === 'testnet' ? 'wss://ws.s0.b.hmny.io' : 'wss://ws.s0.t.hmny.io';
 
 const Web3 = require("web3");
 const web3 = new Web3(ws_api_url);
@@ -23,7 +24,7 @@ const harmony = new Harmony(
     // let's assume we deploy smart contract to this end-point URL
     http_api_url, {
         chainType: ChainType.Harmony,
-        chainId: ChainID.HmyTestnet,
+        chainId: network_mode === 'testnet' ? ChainID.HmyTestnet : ChainID.HmyMainnet,
     }
 )
 
@@ -309,12 +310,12 @@ const getDonationDetails = async(transaction) => {
 const getTransactionDetails = async(lastBlockNumber) => {
     //const lastBlockNumber = await web3.eth.getBlockNumber();
 
-    console.log('Last block number: ', lastBlockNumber);
+    console.log(`[${network_mode}] Last block number: ${lastBlockNumber}`);
 
     block = await web3.eth.getBlock(lastBlockNumber);
 
-    console.log('Last block hash: ', block.hash);
-    console.log('Last block transactions: ', block.transactions);
+    console.log(`[${network_mode}] Last block hash: ${block.hash}`);
+    console.log(`[${network_mode}] Last block transactions: ${block.transactions}`);
 
     // find last transaction
     ///console.log('Search last transaction...');

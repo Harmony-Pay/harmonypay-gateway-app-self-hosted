@@ -31,7 +31,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextAp
     let _domain_key = ""
     let _status = 0
 
-    console.log(_payment_id,_amount,_confirmations,_currency_id,_autosettlements,_timeout_hours,_microtime,_to_address,_domain,_domain_key,_status)
+    //console.log(_payment_id,_amount,_confirmations,_currency_id,_autosettlements,_timeout_hours,_microtime,_to_address,_domain,_domain_key,_status)
 
     pool.connect((err: any, client: any, release: any) => {
       if (err) {

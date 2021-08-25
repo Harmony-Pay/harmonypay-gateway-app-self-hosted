@@ -5,6 +5,7 @@ import pool from '../../../../db'
 import type { NextApiRequest, NextApiResponse } from "next"
 
 const secret = process.env.SECRET
+const network_mode = process.env.NETWORK_MODE || 'testnet'
 
 async function countOrdersQuery() {
 
@@ -43,7 +44,7 @@ function currencyDataResponse(coin: any) {
       wp_plugin_open_in_wallet: coin.wp_plugin_open_in_wallet, 
       metamask_currency: coin.metamask_currency,
       metamask_abi: coin.metamask_abi ? JSON.stringify(coin.metamask_abi,null,0) : null,
-      network_mode: 'testnet'
+      network_mode: network_mode
     }
   }
   currency_data[coin.symbol] = currency_info

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/client'
-import useSwr from 'swr'
+//import useSwr from 'swr'
 import Layout from '../components/layout'
 import Link from "next/link"
 import AccessDenied from '../components/access-denied'
@@ -107,7 +107,7 @@ export default function Page (props: any) {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                     <span className={field.status ? "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800" : "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"}>
-                    {field.status ? 'Paid' : 'Pendent'}
+                    {field.status ? 'Paid' : 'Pending'}
                     </span>
                 </td>
 

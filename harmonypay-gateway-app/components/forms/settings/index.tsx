@@ -29,8 +29,8 @@ type FormInputs = {
   nextauthPassword: string
   secret: string
   wpSiteUrl: string
-  woocommerceConsumerKey: string
-  woocommerceConsumerSecret: string
+  woocommerceWebhookUrl: string
+  woocommerceSignatureSecret: string
   dbHost: string
   dbPort: string
   dbName: string
@@ -43,7 +43,7 @@ function FormSettings(props: FormInputs) {
     const initialState = {...props}
 
     const { register, handleSubmit, setValue } = useForm<FormInputs>();
-    const [ settingform , setSettingForm ] = useState('account');
+    const [ settingform , setSettingForm ] = useState('general');
 
     // a submit function that will execute upon form submission
     const onSubmit = (data: FormInputs) => { 
@@ -55,7 +55,7 @@ function FormSettings(props: FormInputs) {
               //access the resp here....
               //var payload = response.statusText;
               //console.log(`Settings saved: ${payload}`);
-              Alert('success', 'Settings saved...', 'Settings saved with success into .env file..');
+              Alert('success', 'Settings saved...', 'Settings saved with success...');
           })
           .catch((error: any) => {
               Alert('error', 'ERROR...', "OOPS that didn't work :(");
@@ -101,7 +101,6 @@ function FormSettings(props: FormInputs) {
         </div>
       </div>
 
-
       <div className="mt-10 sm:mt-0">
         <div className="md:grid md:grid-cols-3 md:gap-6">
           <div className="md:col-span-1">
@@ -115,11 +114,26 @@ function FormSettings(props: FormInputs) {
               <span>
                 <button
                     type="button"
+                    onClick={() => setSettingForm('general')}
+                    className={settingform === 'general' ? setTabClass(true) : setTabClass(false)}                
+                >
+                    <CalendarIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                    General Settings
+                </button>
+                </span>
+              </p>
+            </div>
+
+            <div className="px-4 sm:px-0 mb-3">
+              <p className="mt-1 text-sm text-gray-600">
+              <span>
+                <button
+                    type="button"
                     onClick={() => setSettingForm('account')}
                     className={settingform === 'account' ? setTabClass(true) : setTabClass(false)}
                 >
                     <BriefcaseIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                    My Account
+                    Account Settings
                 </button>
                 </span>
               </p>
@@ -185,21 +199,6 @@ function FormSettings(props: FormInputs) {
               </p>
             </div>*/}
 
-            <div className="px-4 sm:px-0 mb-3">
-              <p className="mt-1 text-sm text-gray-600">
-              <span>
-                <button
-                    type="button"
-                    onClick={() => setSettingForm('general')}
-                    className={settingform === 'general' ? setTabClass(true) : setTabClass(false)}                
-                >
-                    <CalendarIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                    General Settings
-                </button>
-                </span>
-              </p>
-            </div>
-
           </div>
           <div className="mt-5 md:mt-0 md:col-span-2">
           <div className="shadow overflow-hidden sm:rounded-md">
@@ -207,7 +206,7 @@ function FormSettings(props: FormInputs) {
                   <div className="grid grid-cols-6 gap-6">
                     {settingform === 'account' && <AccountForm register={register} /> }
                     {settingform === 'general' && <GeneralForm register={register} /> }
-                    {settingform === 'wordpress' && <WordpressForm register={register} /> }
+                    {settingform === 'wordpress' && <WordpressForm register={register} setValue={setValue} /> }
                     {/*settingform === 'autosettlement' && <AutosettlementForm register={register} />*/ }
                     {settingform === 'database' && <DatabaseForm register={register} /> }
                     {/*settingform === 'notification' && <NotificationForm register={register} />*/ }

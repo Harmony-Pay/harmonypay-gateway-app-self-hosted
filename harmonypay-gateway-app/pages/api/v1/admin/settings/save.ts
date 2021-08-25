@@ -19,7 +19,11 @@ const saveEnv = async (settings: any, envfile: string) => {
 }
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const token = await getToken({ req, secret })
+  const token: any = await getToken({ req, secret })
+  if (token === null || token === undefined || !token.iat || !token.exp || token.exp > Date.now()) {
+    res.status(404).send('Not Found')
+    return res
+  }
 
   const settings = req.body;
 
@@ -29,57 +33,59 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   }
 
   const envCurrent = `# Set to production when deploying to production
-  NODE_ENV="development"
-  LOG_LEVEL="debug"
-  
-  # Node.js server configuration
-  API_SERVER="${settings.apiServer}"
-  NEXTAUTH_URL="${settings.nextauthUrl}"
-  NEXTAUTH_USERNAME="${settings.nextauthUsername}"
-  NEXTAUTH_PASSWORD="${settings.nextauthPassword}"
-  SECRET="${settings.secret}"
-  # Linux: 'openssl rand -hex 32' or go to https://generate-secret.now.sh/32
-  
-  WP_SITE_URL="${settings.wpSiteUrl}"
-  WOOCOMMERCE_CONSUMER_KEY="${settings.woocommerceConsumerKey}"
-  WOOCOMMERCE_CONSUMER_SECRET="${settings.woocommerceConsumerSecret}"
-  
-  # Postgres DB configuration for the JS client
-  DB_HOST="${settings.dbHost}"
-  DB_PORT="${settings.dbPort}"
-  DB_NAME="${settings.dbName}"
-  DB_USERNAME="${settings.dbUsername}"
-  DB_PASSWORD="${settings.dbPassword}"
-  
-  APPLE_ID="${settings.appleId}"
-  APPLE_TEAM_ID="${settings.appleTeamId}"
-  APPLE_PRIVATE_KEY="${settings.applePrivateKey}"
-  APPLE_KEY_ID="${settings.appleKeyId}"
-  
-  AUTH0_ID="${settings.auth0Id}"
-  AUTH0_SECRET="${settings.auth0Secret}"
-  AUTH0_DOMAIN="${settings.auth0Domain}"
-  
-  FACEBOOK_ID="${settings.facebookId}"
-  FACEBOOK_SECRET="${settings.facebookSecret}"
-  
-  GITHUB_ID="${settings.githubId}"
-  GITHUB_SECRET="${settings.githubSecret}"
-  
-  GOOGLE_ID="${settings.googleId}"
-  GOOGLE_SECRET="${settings.googleSecret}"
-  
-  TWITTER_ID="${settings.twitterId}"
-  TWITTER_SECRET="${settings.twitterSecret}"
-  
-  EMAIL_SERVER="${settings.emailServer}"
-  EMAIL_FROM="${settings.emailFrom}"
-  
-  DATABASE_URL="${settings.databaseUrl}"
+NODE_ENV="development"
+LOG_LEVEL="debug"
+NETWORK_MODE="${settings.networkMode}"
+
+# Node.js server configuration
+API_SERVER="${`${settings.nextauthUrl}/api/v1`}"
+NEXTAUTH_URL="${settings.nextauthUrl}"
+NEXTAUTH_USERNAME="${settings.nextauthUsername}"
+NEXTAUTH_PASSWORD="${settings.nextauthPassword}"
+SECRET="${settings.secret}"
+# Linux: 'openssl rand -hex 32' or go to https://generate-secret.now.sh/32
+
+WP_SITE_URL="${settings.wpSiteUrl}"
+WOOCOMMERCE_WEBHOOK_URL="${settings.woocommerceWebhookUrl}"
+WOOCOMMERCE_SIGNATURE_SECRET="${settings.woocommerceSignatureSecret}"
+
+# Postgres DB configuration for the JS client
+DB_HOST="${settings.dbHost}"
+DB_PORT="${settings.dbPort}"
+DB_NAME="${settings.dbName}"
+DB_USERNAME="${settings.dbUsername}"
+DB_PASSWORD="${settings.dbPassword}"
+
+APPLE_ID="${settings.appleId}"
+APPLE_TEAM_ID="${settings.appleTeamId}"
+APPLE_PRIVATE_KEY="${settings.applePrivateKey}"
+APPLE_KEY_ID="${settings.appleKeyId}"
+
+AUTH0_ID="${settings.auth0Id}"
+AUTH0_SECRET="${settings.auth0Secret}"
+AUTH0_DOMAIN="${settings.auth0Domain}"
+
+FACEBOOK_ID="${settings.facebookId}"
+FACEBOOK_SECRET="${settings.facebookSecret}"
+
+GITHUB_ID="${settings.githubId}"
+GITHUB_SECRET="${settings.githubSecret}"
+
+GOOGLE_ID="${settings.googleId}"
+GOOGLE_SECRET="${settings.googleSecret}"
+
+TWITTER_ID="${settings.twitterId}"
+TWITTER_SECRET="${settings.twitterSecret}"
+
+EMAIL_SERVER="${settings.emailServer}"
+EMAIL_FROM="${settings.emailFrom}"
+
+DATABASE_URL="${settings.databaseUrl}"
   `
   //global env
   saveEnv(envCurrent, "../../../../../../../../.env");
-  // mananger env
+  // manager env
+  saveEnv(envCurrent, "../../../../../../../.env");
   saveEnv(envCurrent, "../../../../../../../.env.local");
 
   res.status(200).send({

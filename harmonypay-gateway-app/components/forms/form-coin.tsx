@@ -11,6 +11,7 @@ type FormInputs = {
     decimal_precision: string
     token_group: string
     contract: string
+    contract_testnet: string
     erc20: string
     hrc20: string
     metamask_abi: string
@@ -36,7 +37,7 @@ function FormSettings(props: FormInputs){
           .then((response: any) => {
               //access the resp here....
               var payload = response.statusText;
-              console.log(`Settings saved: ${payload}`);
+              //console.log(`Settings saved: ${payload}`);
               Alert('success', 'Coin saved...', 'Coin information saved with success...');
               router.push('/coins')
           })
@@ -47,7 +48,7 @@ function FormSettings(props: FormInputs){
 
     if (props) {
         for (let [key, value] of Object.entries(props)) {
-            console.log(`${key}: ${value}`)
+            //console.log(`${key}: ${value}`)
             //initialState[key] = value
             let myKey: any = key as any;
             if (key === 'metamask_abi'){
@@ -139,6 +140,49 @@ function FormSettings(props: FormInputs){
                 </select>
             </div>
 
+            <div className="col-span-6 sm:col-span-6 lg:col-span-6">
+                <label htmlFor="contract" className="block text-sm font-medium text-gray-700">
+                [ <strong className="text-green-500">MAINNET</strong> ] Contract Address
+                </label>
+                <input
+                type="text"
+                id="contract"
+                placeholder="Contract address [MAINNET]"
+                {...register("contract", { required: false })}
+                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+            </div>
+            <div className="col-span-6">
+                <label htmlFor="metamask_abi" className="block text-sm font-medium text-gray-700">
+                Contract ABI
+                </label>
+                <div className="mt-1">
+                <textarea
+                    id="metamask_abi"
+                    rows={9}
+                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
+                    placeholder="Contract ABI json description"
+                    {...register("metamask_abi", { required: false })}
+                />
+                </div>
+                <p className="mt-2 text-sm text-gray-500">
+                Contract ABI json description
+                </p>
+                </div>
+
+            <div className="col-span-6 sm:col-span-6 lg:col-span-6">
+                <label htmlFor="contract_testnet" className="block text-sm font-medium text-gray-700">
+                [ <strong className="text-red-500">TESTNET</strong> ] Contract Address
+                </label>
+                <input
+                type="text"
+                id="contract_testnet"
+                placeholder="Contract address [TESTNET]"
+                {...register("contract_testnet", { required: false })}
+                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                />
+            </div>
+
             {/*<div className="col-span-6 sm:col-span-2 lg:col-span-2">
                 <label htmlFor="metamask_currency" className="block text-sm font-medium text-gray-700">
                 Wallet Symbol
@@ -174,38 +218,6 @@ function FormSettings(props: FormInputs){
                 className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                 />
             </div>
-
-            <div className="col-span-6 sm:col-span-6 lg:col-span-6">
-                <label htmlFor="contract" className="block text-sm font-medium text-gray-700">
-                Contract
-                </label>
-                <input
-                type="text"
-                id="contract"
-                placeholder="Contract address"
-                {...register("contract", { required: false })}
-                className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-                />
-            </div>
-  
-            <div className="col-span-6">
-                <label htmlFor="metamask_abi" className="block text-sm font-medium text-gray-700">
-                Contract ABI
-                </label>
-                <div className="mt-1">
-                <textarea
-                    id="metamask_abi"
-                    rows={9}
-                    className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
-                    placeholder="Contract ABI json description"
-                    {...register("metamask_abi", { required: false })}
-                />
-                </div>
-                <p className="mt-2 text-sm text-gray-500">
-                Contract ABI json description
-                </p>
-                </div>
-
 
             <div className="col-span-6">
                 <div className="flex items-start">

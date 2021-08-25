@@ -12,7 +12,7 @@
 
 ## HarmonyPay Gateway Application - Accept Harmony ONE and HRC20 tokens
 
-### IN PROGRESS
+# IN PROGRESS
 
 Cryptocurrency payment gateway for WooCommerce and Easy Digital Downloads. Accept Harmony ONE and HRC20 Tokens. Peer-to-peer transactions.
 

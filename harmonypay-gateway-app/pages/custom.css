@@ -15,3 +15,14 @@ iframe {
     border-radius: .5rem;
     filter: invert(1);
 }
+
+.error-text {
+font-size: 90px;
+font-family: "Whitney SSm A", "Whitney SSm B", "Helvetica Neue", Helvetica, Arial, Sans-Serif;
+}
+
+@media (min-width: 768px) {
+.error-text {
+    font-size: 160px;
+}
+}

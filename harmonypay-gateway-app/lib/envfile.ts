@@ -4,15 +4,16 @@ import { readFileSync } from 'fs';
 import { parse, stringify } from 'envfile';
 
 
-export default function settingsEnv() {
+export default async function settingsEnv() {
 
     const fileEnvLocal: any = readFileSync(path.join(process.cwd(), '../', '.env'), 'utf-8');
     const fileEnvLocalParsed: any = parse(fileEnvLocal);
   
     const regex = /['"]+/g;
     const updatedEnv = {
-      NodeEnv: fileEnvLocalParsed.NODE_ENV.replace(regex, ''),
-      LogLevel: fileEnvLocalParsed.LOG_LEVEL.replace(regex, ''),
+      nodeEnv: fileEnvLocalParsed.NODE_ENV.replace(regex, ''),
+      logLevel: fileEnvLocalParsed.LOG_LEVEL.replace(regex, ''),
+      networkMode: fileEnvLocalParsed.NETWORK_MODE.replace(regex, ''), // mainnet or testnet
       apiServer: fileEnvLocalParsed.API_SERVER.replace(regex, ''), //http://api.harmonypay.test/api/v1
       nextauthUrl: fileEnvLocalParsed.NEXTAUTH_URL.replace(regex, ''), //#
       nextauthUsername: fileEnvLocalParsed.NEXTAUTH_USERNAME.replace(regex, ''), //harmonypay
@@ -20,8 +21,8 @@ export default function settingsEnv() {
       secret: fileEnvLocalParsed.SECRET.replace(regex, ''), //# Linux: `openssl rand -hex 32` or go to https://generate-secret.now.sh/32
       
       wpSiteUrl: fileEnvLocalParsed.WP_SITE_URL.replace(regex, ''), //#
-      woocommerceConsumerKey: fileEnvLocalParsed.WOOCOMMERCE_CONSUMER_KEY.replace(regex, ''), //#
-      woocommerceConsumerSecret: fileEnvLocalParsed.WOOCOMMERCE_CONSUMER_SECRET.replace(regex, ''), //#
+      woocommerceWebhookUrl: fileEnvLocalParsed.WOOCOMMERCE_WEBHOOK_URL.replace(regex, ''), //#
+      woocommerceSignatureSecret: fileEnvLocalParsed.WOOCOMMERCE_SIGNATURE_SECRET.replace(regex, ''), //#
       
       dbHost: fileEnvLocalParsed.DB_HOST.replace(regex, ''), //=localhost
       dbPort: fileEnvLocalParsed.DB_PORT.replace(regex, ''), //5432

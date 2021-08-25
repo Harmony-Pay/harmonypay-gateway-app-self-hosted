@@ -1,3 +1,10 @@
+import {CheckIcon} from '@heroicons/react/solid'
+import { nanoid } from 'nanoid'
+
+function generateSecretKey(name: string, setValue: any): void {
+    return setValue(name, nanoid(36), { shouldValidate: true })
+}
+
 export default function WordpressForm (props: any) {
     return (
       <>
@@ -20,30 +27,39 @@ export default function WordpressForm (props: any) {
         </div>
 
         <div className="col-span-6">
-        <label htmlFor="woocommerceConsumerKey" className="block text-sm font-medium text-gray-700">
-        Woocommerce API Consumer Key
+        <label htmlFor="woocommerceWebhookUrl" className="block text-sm font-medium text-gray-700">
+        Woocommerce Webhook URL
         </label>
         <input
-        id='woocommerceConsumerKey'
+        id='woocommerceWebhookUrl'
         type='text'
-        placeholder='...'
-        {...props.register("woocommerceConsumerKey", { required: true })}
+        placeholder='.../harmony-pay/v1/webhook'
+        {...props.register("woocommerceWebhookUrl", { required: true })}
         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
         />
         </div>      
 
-        <div className="col-span-6">
-        <label htmlFor="woocommerceConsumerSecret" className="block text-sm font-medium text-gray-700">
-        Woocommerce API Consumer Secret
+        <div className="col-span-5">
+        <label htmlFor="woocommerceSignatureSecret" className="block text-sm font-medium text-gray-700">
+        Webhook Signature Secret
         </label>
         <input
-        id='woocommerceConsumerSecret'
+        id='woocommerceSignatureSecret'
         type='text'
-        placeholder='...'
-        {...props.register("woocommerceConsumerSecret", { required: true })}
+        placeholder='Your Signature Secret'
+        {...props.register("woocommerceSignatureSecret", { required: true })}
         className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
         />
-        </div>     
+        </div>
+        <div className="col-span-1 mt-6">
+        <button
+          type="button"
+          onClick={() => generateSecretKey("woocommerceSignatureSecret", props.setValue)}
+          className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+        >
+          <CheckIcon className="h-5 w-5" aria-hidden="true" />
+        </button>    
+        </div> 
       </>
     )
 }

@@ -53,7 +53,7 @@ async function insertCoinQuery(data: any) {
       values.push(`'${value}'`)
     }
   }
-  console.log(`INSERT INTO api.coins (${keys.join(',')}) VALUES (${values.join(',')}) RETURNING id`)
+  //console.log(`INSERT INTO api.coins (${keys.join(',')}) VALUES (${values.join(',')}) RETURNING id`)
 
   const result = await pool.query(
     `INSERT INTO api.coins (${keys.join(',')}) VALUES (${values.join(',')}) RETURNING id`,
@@ -67,7 +67,11 @@ async function insertCoinQuery(data: any) {
 
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
-  const token = await getToken({ req, secret })
+  const token: any = await getToken({ req, secret })
+  if (token === null || token === undefined || !token.iat || !token.exp || token.exp > Date.now()) {
+    res.status(404).send('Not Found')
+    return res
+  }
   const data = req.body.id ? await updateCoinsQuery(req.body) : await insertCoinQuery(req.body)
   res.status(200).send({
     result: "ok",

@@ -4,9 +4,20 @@
   "description": "Cryptocurrency payment gateway for WooCommerce and Easy Digital Downloads. Accept Harmony ONE and HRC20 Tokens. Peer-to-peer transactions.",
   "scripts": {
     "start": "pm2 start ecosystem.config.js --no-daemon",
+    "dev": "pm2 start ecosystem.dev.config.js --no-daemon",
+    "build:gateway": "cd ./harmonypay-gateway-app && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["blockchain","harmony","one","cryptocurrency","payment gateway"],
+  "keywords": [
+    "blockchain",
+    "harmony",
+    "one",
+    "cryptocurrency",
+    "payment gateway"
+  ],
   "author": "Carlos Guimaraes",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }

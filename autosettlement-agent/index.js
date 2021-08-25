@@ -1,13 +1,12 @@
-const cron = require('node-cron');
-const DB = require("./db");
-const dotenv = require("dotenv");
-
-const Binance = require('binance-api-node').default
-    //const binance = require('./lib/binanceapi');
-    //const cryptocom = require('./lib/cryptocomapi');
-const { CryptoApi, Currency } = require("node-crypto-com");
+const cron = require('node-cron')
+const DB = require("./db")
+const dotenv = require("dotenv")
 
 dotenv.config();
+const Binance = require('binance-api-node').default
+const { CryptoApi, Currency } = require("node-crypto-com")
+
+const network_mode = process.env.NETWORK_MODE || 'testnet'
 
 async function getOpenSettlementsQuery(exchange_id, settle_pair, status) {
 
@@ -110,6 +109,7 @@ async function getPairCryptocomAcountSummary(cryptocom, currency) {
 async function makeSettlementBinance(binance, pair, settlement_amount) {
 
     try {
+
         console.log(await binance.time())
         console.log(`getAvgPrice ${pair}: `, await binance.avgPrice({ symbol: pair }));
         //console.log('getAvgPrice BUSD: ', await binance.avgPrice({ symbol: 'ONEBUSD' }));
@@ -117,41 +117,61 @@ async function makeSettlementBinance(binance, pair, settlement_amount) {
 
         console.log(avgprice.price, parseFloat(settlement_amount) * parseFloat(avgprice.price));
 
-        const testOrder = await binance.orderTest({
-            symbol: pair,
-            side: 'SELL',
-            type: 'MARKET',
-            quantity: settlement_amount,
-            //price: avgprice.price,
-            /*
-            timeInForce?: OrderTimeInForce;
-            quoteOrderQty?: number;
-            newClientOrderId?: string;
-            stopPrice?: number;
-            icebergQty?: number;
-            newOrderRespType?: OrderResponseType;*/
-        });
+        if (network_mode === 'testnet') {
+            const testOrder = await binance.orderTest({
+                symbol: pair,
+                side: 'SELL',
+                type: 'MARKET',
+                quantity: settlement_amount,
+                //price: avgprice.price,
+                /*
+                timeInForce?: OrderTimeInForce;
+                quoteOrderQty?: number;
+                newClientOrderId?: string;
+                stopPrice?: number;
+                icebergQty?: number;
+                newOrderRespType?: OrderResponseType;*/
+            });
 
-        console.log('TestOrder --- ', testOrder, {
-            symbol: pair,
-            side: 'SELL',
-            type: 'MARKET',
-            quantity: settlement_amount
-        });
+            console.log('TestOrder --- ', testOrder, {
+                symbol: pair,
+                side: 'SELL',
+                type: 'MARKET',
+                quantity: settlement_amount
+            });
 
-        return {
-            symbol: pair,
-            orderId: 00000,
-            clientOrderId: '1XZTVBTGS4K1e',
-            transactTime: Date.now(),
-            price: avgprice.price,
-            origQty: settlement_amount,
-            executedQty: settlement_amount,
-            status: 'NEW',
-            type: 'MARKET',
-            side: 'SELL'
+            return {
+                symbol: pair,
+                orderId: 00000,
+                clientOrderId: '1XZTVBTGS4K1e',
+                transactTime: Date.now(),
+                price: avgprice.price,
+                origQty: settlement_amount,
+                executedQty: settlement_amount,
+                status: 'NEW',
+                type: 'MARKET',
+                side: 'SELL'
+            }
+
+        } else {
+
+            const settlementOrder = await binance.order({
+                symbol: pair,
+                side: 'SELL',
+                type: 'MARKET',
+                quantity: settlement_amount
+            });
+
+            console.log('Settlement Order --- ', settlementOrder, {
+                symbol: pair,
+                side: 'SELL',
+                type: 'MARKET',
+                quantity: settlement_amount
+            });
+
+            return settlementOrder;
+
         }
-
 
 
     } catch (e) {
@@ -163,38 +183,60 @@ async function makeSettlementBinance(binance, pair, settlement_amount) {
 
 async function makeSettlementCryptocom(cryptocom, pair, settlement_amount) {
 
-    //Create Order
-    const { data: order, status: order_status } = await cryptocom.api.private.createOrder({
-        instrument_name: pair,
-        side: 'SELL',
-        type: 'LIMIT',
-        quantity: 3,
-        price: 0.10396,
-    });
+    if (network_mode === 'testnet') {
+        //Create Order
+        const { data: order, status: order_status } = await cryptocom.api.private.createOrder({
+            instrument_name: pair,
+            side: 'SELL',
+            type: 'LIMIT',
+            quantity: 3,
+            price: 0.13396,
+        });
 
-    console.log('TestOrder --- ', order, {
-        instrument_name: pair,
-        side: 'SELL',
-        type: 'LIMIT',
-        quantity: 3,
-        price: 0.10396,
-    }, order_status);
+        console.log('TestOrder --- ', order, {
+            instrument_name: pair,
+            side: 'SELL',
+            type: 'LIMIT',
+            quantity: 3,
+            price: 0.13396,
+        }, order_status);
 
-    const { data: orders, status: orders_status } = await cryptocom.api.private.getOpenOrders({
-        instrument_name: pair,
-    });
+        const { data: orders, status: orders_status } = await cryptocom.api.private.getOpenOrders({
+            instrument_name: pair,
+        });
 
-    console.log(orders, orders_status);
+        console.log(orders, orders_status);
 
 
-    const { data: d, status: s } = await cryptocom.api.private.cancelOrder({
-        instrument_name: pair,
-        order_id: order.result.order_id,
-    });
+        const { data: d, status: s } = await cryptocom.api.private.cancelOrder({
+            instrument_name: pair,
+            order_id: order.result.order_id,
+        });
 
-    console.log(order.result, d.code, s);
+        console.log(order.result, d.code, s);
 
-    return order.result;
+        return order.result;
+
+    } else {
+
+        //Create Order
+        const { data: order, status: order_status } = await cryptocom.api.private.createOrder({
+            instrument_name: pair,
+            side: 'SELL',
+            type: 'MARKET',
+            quantity: settlement_amount
+        });
+
+        console.log('Settlement Order --- ', order, {
+            instrument_name: pair,
+            side: 'SELL',
+            type: 'MARKET',
+            quantity: settlement_amount,
+        }, order_status);
+
+        return order.result;
+
+    }
 
 }
 
@@ -207,7 +249,12 @@ cron.schedule('*/6 * * * *', async() => {
     pairs_binance.map(async pair_settle => {
             let binance_settlements = await getOpenSettlementsQuery('binance', pair_settle.settlement_pair, 0);
             //console.log(binance_settlements);
-
+            if (binance_settlements !== null 
+                && binance_settlements.length 
+                && binance_settlements[0].settlement_info
+                && binance_settlements[0].settlement_info.binance_api_key
+                && binance_settlements[0].settlement_info.binance_api_secret) {
+  
             const binance = Binance({
                 apiKey: binance_settlements[0].settlement_info.binance_api_key, // Get this from your account on binance.com
                 apiSecret: binance_settlements[0].settlement_info.binance_api_secret, // Same for this
@@ -222,11 +269,12 @@ cron.schedule('*/6 * * * *', async() => {
             let usd_amount = total_settlement * parseFloat(avgPrice.price);
             let accountBinance = await getPairBinanceAcountSummary(binance);
             if (parseFloat(accountBinance.free) < parseFloat(total_settlement)) {
-                console.log(`[!BINANCE] Balance available (${accountBinance.free} ONE) BELLOW settlement requirements (${total_settlement} ONE)`)
+                console.log(`[!BINANCE] Balance available (${accountBinance.free} ONE) BELLOW settlement requirements (${total_settlement} ONE)`);
+                return false;
             }
 
             if (usd_amount < 11) {
-                console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements USD$11(binance))`)
+                console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements USD$11(binance))`);
                 return false;
             }
 
@@ -249,6 +297,8 @@ cron.schedule('*/6 * * * *', async() => {
                 console.log(order_settled);
             }
 
+            //end if settlements exists
+            }
         })
         //}
 
@@ -257,6 +307,12 @@ cron.schedule('*/6 * * * *', async() => {
     console.log(pairs_cryptocom);
     pairs_cryptocom.map(async pair_settle => {
         let cryptocom_settlements = await getOpenSettlementsQuery('cryptocom', pair_settle.settlement_pair, 0);
+
+        if (cryptocom_settlements !== null
+            && cryptocom_settlements.length 
+            && cryptocom_settlements[0].settlement_info
+            && cryptocom_settlements[0].settlement_info.cryptocom_api_key
+            && cryptocom_settlements[0].settlement_info.cryptocom_api_secret) {
 
         const cryptocom = {
             api: new CryptoApi(cryptocom_settlements[0].settlement_info.cryptocom_api_key, cryptocom_settlements[0].settlement_info.cryptocom_api_secret),
@@ -276,11 +332,12 @@ cron.schedule('*/6 * * * *', async() => {
         let accountCryptocom = await getPairCryptocomAcountSummary(cryptocom, 'ONE');
         let accountBalance = accountCryptocom.data.result.accounts[0].available;
         if (parseFloat(accountBalance) < parseFloat(total_settlement)) {
-            console.log(`[!CRYPTO.COM] Balance available (${accountBalance} ONE) BELLOW settlement requirements (${total_settlement} ONE)`)
+            console.log(`[!CRYPTO.COM] Balance available (${accountBalance} ONE) BELLOW settlement requirements (${total_settlement} ONE)`);
+            return false;
         }
 
         if (usd_amount < 1) {
-            console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements USD$1)`)
+            console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements USD$1)`);
             return false;
         }
 
@@ -303,8 +360,10 @@ cron.schedule('*/6 * * * *', async() => {
             console.log(order_settled);
         }
 
+        //end if settlements exists
+        }
     })
 
 });
 
-console.info('[Autosettlement Agent] Running every 6 minutes...')
+console.info(`[${network_mode}] [Autosettlement Agent] Running every 6 minutes...`)
