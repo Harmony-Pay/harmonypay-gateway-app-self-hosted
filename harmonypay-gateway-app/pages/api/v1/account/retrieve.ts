@@ -38,6 +38,7 @@ function currencyDataResponse(coin: any) {
     decimal_precision: coin.decimal_precision,
     group: coin.token_group,
     contract: coin.contract ? coin.contract : null,
+    contract_testnet: coin.contract_testnet ? coin.contract_testnet : null,
     erc20: coin.erc20 ? coin.erc20 : null,
     hrc20: coin.hrc20 ? coin.hrc20 : null,
     supports: { 

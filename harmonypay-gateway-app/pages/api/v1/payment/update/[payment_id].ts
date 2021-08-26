@@ -55,6 +55,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextAp
   }
 
   const signed_payload = generateHarmonyPaySignature(webhook_secret, `${dayjs().unix()}.${JSON.stringify(data)}`)
+  console.log(`${dayjs().unix()}.${JSON.stringify(data)}`)
   const signature = `t=${dayjs().unix()},v1=${signed_payload}`
   const header = {
     timestamp: dayjs().unix(),

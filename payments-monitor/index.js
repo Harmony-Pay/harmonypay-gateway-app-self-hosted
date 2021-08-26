@@ -35,9 +35,9 @@ const getContractInstance = (harmony, artifact) => {
 
 
 const convertOneToEthAddress = async(address) => {
-    console.log('ADDRESS === ', address);
     const data = fromBech32(address);
     //console.log(data.toString('hex'));
+    //console.log('ADDRESS === ', address, data);
     return data;
 }
 
@@ -162,6 +162,37 @@ async function getWalletQuery(currency_id) {
     return result.rows[0];
 }
 
+async function isAlreadyDonated(transaction_hash) {
+
+    /*const result = await DB.pool.query(
+        `SELECT id FROM api.donations WHERE transaction_id = $1`, [transaction_hash]
+    )
+
+    if (!result || !result.rows || !result.rows.length) return null;
+    return result.rows[0];*/
+    let API_SERVER = process.env.API_SERVER;
+    return await axios.get(`${API_SERVER}/admin/donation/${transaction_hash}`, {})
+        .then(function(response) {
+            console.log('isAlreadyDonated Response ----- ', response.data);
+            return response.data.data;
+        })
+        .catch(function(error) {
+            console.log(error);
+            return false;
+        })
+}
+
+
+async function isTransactionCaptured(transaction_hash) {
+
+    const result = await DB.pool.query(
+        `SELECT id FROM api.transactions WHERE hash = $1`, [transaction_hash]
+    )
+
+    if (!result || !result.rows || !result.rows.length) return null;
+    return result.rows[0];
+}
+
 
 async function insertDonationInfoQuery(donation_info) {
 
@@ -271,13 +302,12 @@ async function insertSettlementQuery(order_id, order_info, transaction_id) {
 
 
 const getDonationDetails = async(transaction) => {
-
-    //if (isDonation === true) {
+    
     let currency_wallet = await getWalletQuery('ONE');
 
     convertOneToEthAddress(currency_wallet.address).then(async wallet_address => {
 
-            console.log(`${wallet_address}`.toLowerCase(), `${transaction.to}`.toLowerCase());
+            //console.log(`getDonationDetails ==> ${wallet_address}`.toLowerCase(), `${transaction.to}`.toLowerCase());
             if (`${wallet_address}`.toLowerCase() === `${transaction.to}`.toLowerCase()) {
 
                 await insertTransactionQuery(0, transaction);
@@ -304,6 +334,21 @@ const getDonationDetails = async(transaction) => {
         })
         //}
 
+    return false;
+}
+
+const checkBlockTransactions = async(block_transactions) => {
+    let transaction_hashes = [];
+    for (let i = 0; i < block_transactions.length; i++) {
+        transaction_hashes.push(block_transactions[i]);
+    }
+    
+    let transactions = [];
+    for (let i = 0; i < transaction_hashes.length; i++) {
+        let transaction = await web3.eth.getTransaction(transaction_hashes[i])
+        transactions.push(transaction);
+    }
+    return transactions;
 }
 
 
@@ -315,7 +360,7 @@ const getTransactionDetails = async(lastBlockNumber) => {
     block = await web3.eth.getBlock(lastBlockNumber);
 
     console.log(`[${network_mode}] Last block hash: ${block.hash}`);
-    console.log(`[${network_mode}] Last block transactions: ${block.transactions}`);
+    //console.log(`[${network_mode}] Last block transactions: ${block.transactions}`);
 
     // find last transaction
     ///console.log('Search last transaction...');
@@ -330,18 +375,146 @@ const getTransactionDetails = async(lastBlockNumber) => {
 
     } else {
         block = await web3.eth.getBlock(lastBlockNumber)
-        const lastTransaction = await block.transactions[block.transactions.length - 1]
+        const lastTransaction = await block.transactions[block.transactions.length - 1];
+        const blockTransactions = await block.transactions;
+        console.log(`🪙  Block ${lastBlockNumber}, Transactions: `, transactionsCount);
         console.log('Last transaction hash: ', lastTransaction)
-        let transaction = await web3.eth.getTransaction(lastTransaction)
+        //let transaction = await web3.eth.getTransaction(lastTransaction);
+        let transactions = await checkBlockTransactions(blockTransactions);
 
         DB.pool.connect(async(err, client, release) => {
             if (err) {
                 return console.error('Error acquiring client', err.stack)
             }
 
-            let isDonation = false
+            // promise
+            client
+            .query(`SELECT payment_id, currency_id ,amount, timeout_hours, microtime, to_address, confirmations, autosettlements, domain, status FROM api.orders WHERE status = $1`, [0])
+            .then( result => {
+                if (result && result.rows && result.rows.length) {
 
-            client.query('SELECT payment_id, currency_id ,amount, timeout_hours, microtime, to_address, confirmations, autosettlements, domain FROM api.orders WHERE status = 0', [], (err, result) => {
+                    result.rows.map(async row => {
+                        return await convertOneToEthAddress(row.to_address).then(async pay_address => {
+                                 const currency = await getCurrencyQuery(row.currency_id);
+ 
+                                 transactions.map(async (transaction, idx) => {
+                                 //console.log('✨ Last Ethereum Address: ', `${pay_address}`.toLowerCase(), `${transaction.to}`.toLowerCase(), row.payment_id);
+                                 if (`${transaction.to}`.toLowerCase() === `${pay_address}`.toLowerCase() 
+                                 || `${transaction.to}`.toLowerCase() === `${network_mode === 'testnet' ? currency && currency.contract_testnet ? currency.contract_testnet : '' : currency && currency.contract ? currency.contract : ''}`.toLowerCase()) {
+ 
+                                     let params = {
+                                         amount: 0
+                                     }
+ 
+                                     if ( (currency !== undefined || currency !== null) && (network_mode === 'testnet' ? currency?.contract_testnet : currency?.contract) !== null) {
+ 
+                                         if (`${transaction.to}`.toLowerCase() === `${network_mode === 'testnet' ? currency?.contract_testnet : currency?.contract}`.toLowerCase()) {
+ 
+                                             const instance = await harmony.contracts.createContract(currency.metamask_abi, row.to_address); //to address of transaction
+                                             params = await decodeInput(
+                                                 instance,
+                                                 currency.decimal_precision,
+                                                 currency.symbol,
+                                                 transaction.input //txn.input is data of transaction
+                                             );
+ 
+                                             console.log('transaction.input ===> ', params);
+                                             //amountToWei(`${row.amount}`);
+                                             //amountFromWei(`${transaction.value}`);
+ 
+                                             console.log('Number ==> ', Number(amountFromWei(`${transaction.value}`)).toFixed(2), Number(amountFromWei(amountToWei(`${row.amount}`))).toFixed(2), Number(amountFromWei(amountToWei(`${params.amount}`))).toFixed(2));
+                                         }
+ 
+                                     } else {
+ 
+                                         params = {
+                                             amount: 0
+                                         }
+ 
+                                     }
+ 
+                                     if (Number(amountFromWei(`${transaction.value}`)).toFixed(2) === Number(`${row.amount}`).toFixed(2) ||
+                                         Number(amountFromWei(amountToWei(`${params.amount}`))).toFixed(2) === Number(`${row.amount}`).toFixed(2) ||
+                                         Number(amountFromWei(amountToWei(`${params.amount}`))).toFixed(2) === Number(amountFromWei(amountToWei(`${row.amount}`))).toFixed(2)
+                                     ) {
+ 
+                                         client.query('UPDATE api.orders SET status = $1 WHERE payment_id = $2', [2, row.payment_id], async(err, result) => {
+ 
+                                             if (err) {
+                                                 return console.error('Error executing update', err.stack)
+                                             }
+ 
+                                             if (result.rows) {
+                                                 await updateOrderStatus(row.payment_id);
+                                                 console.log('📦 Order Updated ', result.rows);
+                                                 await insertTransactionQuery(row.payment_id, transaction);
+                                                 console.log('📦 Transaction Inserted for order#', row.payment_id);
+                                                 await insertSettlementQuery(row.payment_id, row, transaction.hash);
+                                                 console.log('📦 AutoSettlement scheduled for order#', row.payment_id);
+                                                 transactions.splice(idx, 1);
+                                             }
+ 
+                                             //client.release()
+ 
+                                         });
+                            
+                                     }
+ 
+                                 }
+                                 //end if found a transaction
+                                 })
+
+                             })
+ 
+                             //
+                     });
+
+                     
+                } else {
+
+                    transactions.map(async transaction => {
+                        let isDonation = await getDonationDetails(transaction);
+                        return isDonation;
+                    })
+                }
+                
+                return transactions;
+            })
+            .then( async transactions => {
+                //console.log('Results: ', transactions);
+                transactions.map(async transaction => {
+                    let isDonation = await getDonationDetails(transaction);
+                    return isDonation;
+                })
+                client.release();
+                return transactions;
+            })
+            .then(more_transactions => {
+                //console.log('More transactions ===> ', more_transactions)
+
+                /*if (paid_orders !== undefined){
+                    paid_orders.map(async transaction => {
+                        let isDonation = await getDonationDetails(transaction);
+                        return isDonation;
+                    })
+                } else {
+                    transactions.map(async transaction => {
+                        let isDonation = await getDonationDetails(transaction);
+                        return isDonation;
+                    })
+                }*/
+
+                /*transactions.map(async transaction => {
+                    let isDonation = await getDonationDetails(transaction);
+                    return isDonation;
+                })*/
+                
+                return more_transactions;
+            })
+            .catch(e => console.error(e.stack))
+
+            /*client.query('SELECT payment_id, currency_id ,amount, timeout_hours, microtime, to_address, confirmations, autosettlements, domain FROM api.orders WHERE status = 0', [], 
+            async (err, result) => {
 
                 if (err) {
                     return console.error('Error executing query', err.stack)
@@ -350,19 +523,20 @@ const getTransactionDetails = async(lastBlockNumber) => {
                 if (result && result.rows && result.rows.length) {
 
                     result.rows.map(async row => {
-                        convertOneToEthAddress(row.to_address).then(async pay_address => {
+                       return await convertOneToEthAddress(row.to_address).then(async pay_address => {
                                 const currency = await getCurrencyQuery(row.currency_id);
-                                console.log('✨ Last Ethereum Address: ', `${pay_address}`.toLowerCase(), `${transaction.to}`.toLowerCase(), row.payment_id);
 
+                                transactions.map(async transaction => {
+                                console.log('✨ Last Ethereum Address: ', `${pay_address}`.toLowerCase(), `${transaction.to}`.toLowerCase(), row.payment_id);
                                 if (`${transaction.to}`.toLowerCase() === `${pay_address}`.toLowerCase() || `${transaction.to}`.toLowerCase() === `${currency && currency.contract ? currency.contract : ''}`.toLowerCase()) {
 
                                     let params = {
                                         amount: 0
                                     }
 
-                                    if (currency !== undefined && currency.contract !== null) {
+                                    if ( (currency !== undefined || currency !== null) && currency?.contract !== null) {
 
-                                        if (`${transaction.to}`.toLowerCase() === `${currency.contract}`.toLowerCase()) {
+                                        if (`${transaction.to}`.toLowerCase() === `${currency?.contract}`.toLowerCase()) {
 
                                             const instance = await harmony.contracts.createContract(currency.metamask_abi, row.to_address); //to address of transaction
                                             params = await decodeInput(
@@ -410,39 +584,15 @@ const getTransactionDetails = async(lastBlockNumber) => {
                                             //client.release()
 
                                         });
-
-                                        //Maybe is a donation    
+                           
                                     }
-                                    /*else {
-
-                                        let currency_wallet = await getWalletQuery(row.currency_id);
-                                        if (`${currency_wallet.address}`.toLowerCase() === `${transaction.to}`.toLowerCase()) {
-                                            await insertTransactionQuery(0, transaction);
-                                            console.log('📦 Transaction Inserted for a donation #');
-                                            //transaction_id,amount,confirmations,currency_id,autosettlements,microtime,from_address,to_address,domain,domain_key,status
-                                            let _donation_info = new Array();
-                                            _donation_info[0] = transaction.hash;
-                                            _donation_info[1] = amountFromWei(transaction.value);
-                                            _donation_info[2] = 1;
-                                            _donation_info[3] = currency.symbol;
-                                            _donation_info[4] = [];
-                                            _donation_info[5] = 0;
-                                            _donation_info[6] = transaction.from;
-                                            _donation_info[7] = transaction.to;
-                                            _donation_info[8] = '';
-                                            _donation_info[8] = '';
-                                            _donation_info[8] = 2;
-
-                                            await insertDonationInfoQuery(_donation_info);
-
-                                        }
-
-
-                                    }*/
 
                                 }
+                                //end if found a transaction
+                                }) 
 
                             })
+
                             //
                     })
 
@@ -450,16 +600,19 @@ const getTransactionDetails = async(lastBlockNumber) => {
 
                 } else {
 
-                    return getDonationDetails(transaction);
+                    transactions.map(async transaction => {
+                        let isDonation = await getDonationDetails(transaction);
+                        return isDonation;
+                    })
                 }
 
-            })
+            })*/
 
-            release()
+            
         })
 
 
-        console.log('🏧 Last transaction: ', JSON.stringify(transaction))
+        //console.log('🏧 Last transaction: ', JSON.stringify(transaction))
     }
 
 };
@@ -489,7 +642,7 @@ let subscription = web3.eth
         }
 
         if (error) {
-            savePid(Date.now(), '../.web3pid');
+            savePid(Date.now().toString(), '../.web3pid');
             console.error(error);
         }
     })
