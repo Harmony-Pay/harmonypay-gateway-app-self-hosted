@@ -40,8 +40,8 @@ fi
 echo "Cloning repository"
 git clone https://github.com/sekmet/harmonypay-gateway-app.git harmonypay
 cd harmonypay
-touch .env
 echo "Installing dependencies"
+cp ./utils/.env.sample .env
 npm install
 echo "Installing autosettlement agent dependencies"
 cd autosettlement-agent
@@ -53,7 +53,7 @@ npm install
 cd ..
 echo "Installing harmonypay gateway app dependencies"
 cd harmonypay-gateway-app
-touch .env
+cp ../utils/.env.sample .env
 npm install
 cd ..
 echo "Building Harmonypay gateway application."
