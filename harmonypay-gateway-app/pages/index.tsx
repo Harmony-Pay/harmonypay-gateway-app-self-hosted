@@ -54,9 +54,7 @@ export default function Page () {
   } else {
     let status = true;
     return (
-    <Layout>
-    {/*<h1 className="font-bold text-xl mb-3">Harmony Pay Gateway</h1>
-    <p><strong>{content || "\u00a0"}</strong></p>*/}     
+    <Layout>   
     <WelcomeBanner />
     <div className="mt-3 flex items-center justify-center">
       <div className="grid grid-cols-3 gap-6">
