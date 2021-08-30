@@ -17,7 +17,6 @@ export async function getStaticProps() {
   }
 }
 
-
 export default function Page (props: any) {
   const [ session, loading ] = useSession()
   const [ content , setContent ] = useState()
@@ -25,9 +24,6 @@ export default function Page (props: any) {
   // Fetch content from protected route
   useEffect(()=>{
     const currentUrl = window.location.href
-
-    console.log(currentUrl, props)
-
     if (props.nextauthUrl === undefined || 
       props.nextauthUrl === null || 
       props.nextauthUrl === '' || 
