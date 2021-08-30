@@ -106,8 +106,8 @@ export default function Page (props: any) {
                 </Link>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={field.status ? "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800" : "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"}>
-                    {field.status ? 'Paid' : 'Pending'}
+                    <span className={parseInt(field.status) > 0 ? "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800" : (parseInt(field.status) < 0 ? "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800" : "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-600")}>
+                    {parseInt(field.status) > 0 ? 'Paid' : (parseInt(field.status) < 0 ? 'Cancelled' : 'Pending')}
                     </span>
                 </td>
 

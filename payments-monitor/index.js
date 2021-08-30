@@ -406,9 +406,9 @@ const getTransactionDetails = async(lastBlockNumber) => {
                                          amount: 0
                                      }
  
-                                     if ( (currency !== undefined || currency !== null) && (network_mode === 'testnet' ? currency?.contract_testnet : currency?.contract) !== null) {
+                                     if ( (currency !== undefined || currency !== null) && (network_mode === 'testnet' ? currency.contract_testnet : currency.contract) !== null) {
  
-                                         if (`${transaction.to}`.toLowerCase() === `${network_mode === 'testnet' ? currency?.contract_testnet : currency?.contract}`.toLowerCase()) {
+                                         if (`${transaction.to}`.toLowerCase() === `${network_mode === 'testnet' ? currency.contract_testnet : currency.contract}`.toLowerCase()) {
  
                                              const instance = await harmony.contracts.createContract(currency.metamask_abi, row.to_address); //to address of transaction
                                              params = await decodeInput(

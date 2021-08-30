@@ -112,3 +112,5 @@ active BOOLEAN,
 created_at TIMESTAMP default current_timestamp);
 CREATE INDEX idx_coin_id ON api.coins(id);
 CREATE INDEX idx_coin_name ON api.coins(name);
+
+ALTER SYSTEM SET max_connections TO '500';
