@@ -26,6 +26,8 @@ export default function Page (props: any) {
   useEffect(()=>{
     const currentUrl = window.location.href
 
+    console.log(currentUrl, props)
+    
     if (props.nextauthUrl === undefined || 
       props.nextauthUrl === null || 
       props.nextauthUsername === undefined || 

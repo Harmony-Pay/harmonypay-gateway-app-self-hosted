@@ -190,7 +190,7 @@ async function makeSettlementCryptocom(cryptocom, pair, settlement_amount) {
             side: 'SELL',
             type: 'LIMIT',
             quantity: 3,
-            price: 0.13396,
+            price: 0.16396,
         });
 
         console.log('TestOrder --- ', order, {
@@ -198,7 +198,7 @@ async function makeSettlementCryptocom(cryptocom, pair, settlement_amount) {
             side: 'SELL',
             type: 'LIMIT',
             quantity: 3,
-            price: 0.13396,
+            price: 0.16396,
         }, order_status);
 
         const { data: orders, status: orders_status } = await cryptocom.api.private.getOpenOrders({

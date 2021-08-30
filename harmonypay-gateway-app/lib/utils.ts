@@ -3,7 +3,7 @@ import axios from "axios";
 export async function resetEnviroment(api_server_url: string) {
 
     if (!api_server_url) {
-        throw new Error('api server url is not defined');
+        throw new Error('api server url is not defined')
     }
 
     let envdata: any = {
@@ -23,10 +23,12 @@ export async function resetEnviroment(api_server_url: string) {
 
     axios.post(`/api/v1/admin/settings/save`, envdata)
     .then((response: any) => {
-        console.log('ok');
+        console.log('ok')
+        return response
     })
     .catch((error: any) => {
-        console.log('error', error);
+        console.log('error', error)
     });
 
+    return false
 }
