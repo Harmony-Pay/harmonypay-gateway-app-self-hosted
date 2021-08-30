@@ -1,22 +1,38 @@
 import { useState, useEffect } from 'react'
 import Layout from '../components/layout'
-import { signIn } from "next-auth/client"
+import { signIn } from 'next-auth/client'
 import { useSession } from 'next-auth/client'
 import AccessDenied from '../components/access-denied'
 import WelcomeBanner from '../components/welcome-banner'
+import settingsEnv from '../lib/envfile'
+import { resetEnviroment } from '../lib/utils'
 
-export default function Page () {
+// This function gets called at build time
+export async function getStaticProps() {
+  // By returning { props: { posts } }, the Blog component
+  // will receive `posts` as a prop at build time
+  const currentEnv = await settingsEnv()
+  return {
+    props: {...currentEnv},
+  }
+}
+
+
+export default function Page (props: any) {
   const [ session, loading ] = useSession()
   const [ content , setContent ] = useState()
 
   // Fetch content from protected route
   useEffect(()=>{
-    /*const fetchData = async () => {
-      const res = await fetch('/api/examples/protected')
-      const json = await res.json()
-      if (json.content) { setContent(json.content) }
+    const currentUrl = window.location.href
+
+    if (props.nextauthUrl === undefined || 
+      props.nextauthUrl === null || 
+      props.nextauthUsername === undefined || 
+      props.nextauthUsername === null) {
+      resetEnviroment(currentUrl)
     }
-    fetchData()*/
+    
   },[session])
 
   // When rendering client side don't display anything until loading is complete

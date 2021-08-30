@@ -23,6 +23,7 @@ import DatabaseForm from "./database";
 type FormInputs = {
   NodeEnv: string
   LogLevel: string
+  networkMode: string
   apiServer: string
   nextauthUrl: string
   nextauthUsername: string
