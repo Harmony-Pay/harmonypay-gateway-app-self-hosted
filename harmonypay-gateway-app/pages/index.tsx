@@ -27,11 +27,13 @@ export default function Page (props: any) {
     const currentUrl = window.location.href
 
     console.log(currentUrl, props)
-    
+
     if (props.nextauthUrl === undefined || 
       props.nextauthUrl === null || 
+      props.nextauthUrl === '' || 
       props.nextauthUsername === undefined || 
-      props.nextauthUsername === null) {
+      props.nextauthUsername === null ||
+      props.nextauthUsername === '') {
       resetEnviroment(currentUrl)
     }
     
