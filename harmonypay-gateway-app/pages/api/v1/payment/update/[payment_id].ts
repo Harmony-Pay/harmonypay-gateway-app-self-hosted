@@ -68,7 +68,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextAp
     result: "ok",
     token: JSON.stringify(token, null, 2),
     payment_id: req.query.payment_id,
-    message: "payment/update sent to http:\/\/api.harmonypay.test\/"
+    message: "payment/update sent to http:\/\/api.harmonypay.one\/"
   })
 
   return res;

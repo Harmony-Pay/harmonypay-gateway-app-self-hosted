@@ -17,7 +17,6 @@ export default function Page (props: any) {
     const fetchData = async () => {
         const res = await fetch('/api/v1/admin/orders')
         const json = await res.json()
-        //console.log(json)
         if (json.data) { setContent(json.data) }
       }
     fetchData()

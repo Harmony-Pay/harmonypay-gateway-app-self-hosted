@@ -34,6 +34,7 @@ MAXWATCHES=`cat /proc/sys/fs/inotify/max_user_watches`
 if [ "$MAXWATCHES" = "8192" ]; then
     echo "Increasing max user watches"
     echo 'fs.inotify.max_user_watches=524288' | sudo tee -a /etc/sysctl.conf
+    sudo sysctl -p
 fi
 
 # Clone the repository and install dependancies

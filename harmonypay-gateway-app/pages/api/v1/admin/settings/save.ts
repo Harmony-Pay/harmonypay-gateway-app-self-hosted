@@ -57,6 +57,10 @@ DB_NAME="${settings.dbName}"
 DB_USERNAME="${settings.dbUsername}"
 DB_PASSWORD="${settings.dbPassword}"
 
+SETTLEMENT_INTERVAL="${settings.settlementInterval}"
+SETTLEMENT_BINANCE_MIN="${settings.settlementBinanceMin}"
+SETTLEMENT_CRYPTOCOM_MIN="${settings.settlementCryptocomMin}"
+
 APPLE_ID="${settings.appleId}"
 APPLE_TEAM_ID="${settings.appleTeamId}"
 APPLE_PRIVATE_KEY="${settings.applePrivateKey}"

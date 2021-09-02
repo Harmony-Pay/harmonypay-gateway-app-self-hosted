@@ -35,10 +35,22 @@ const getContractInstance = (harmony, artifact) => {
 
 
 const convertOneToEthAddress = async(address) => {
-    const data = fromBech32(address);
-    //console.log(data.toString('hex'));
-    //console.log('ADDRESS === ', address, data);
-    return data;
+    if (!address) return false;
+
+    if (isBech32Address(address) || isBech32TestNetAddress(address)) {
+        const data = fromBech32(address);
+        //console.log(data.toString('hex'));
+        //console.log('fromBech32 ADDRESS === ', address, data.toLowerCase());
+        return data;
+
+    } else {
+       // const ethaddress = toBech32(address.toLowerCase());
+        //const data = fromBech32(ethaddress);
+        const data = address.toLowerCase();
+        //console.log(data.toString('hex'));
+        //console.log('toBech32 ADDRESS === ', address, data);
+        return data;
+    }
 }
 
 const getOrdersPending = async() => {
@@ -75,7 +87,7 @@ async function updateOrderStatus(order_id) {
     let API_SERVER = process.env.API_SERVER;
     return await axios.post(`${API_SERVER}/payment/update/${order_id}`.toLowerCase(), {})
         .then(function(response) {
-            console.log('response ----- ', response.data);
+            //console.log('response ----- ', response.data);
             return response.data;
         })
         .catch(function(error) {

@@ -31,7 +31,6 @@ export default function Page (props: any) {
   return (
     <Layout>
       <h1 className="font-bold text-xl mb-3">Coin Details</h1>
-      {/*<p><strong>{content || "\u00a0"}</strong></p>*/}
       <FormCoin {...content}/>
     </Layout>
   )

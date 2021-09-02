@@ -23,4 +23,6 @@ sleep 6
 echo "Building harmonypay database..."
 docker exec -i harmonypay psql -U postgres -c "CREATE DATABASE harmonypaydb;"
 cat ./db.sql | docker exec -i harmonypay psql -U postgres -d harmonypaydb
-echo "Harmonypay database built."
+sleep 3
+docker restart harmonypay
+echo "Harmonypay database setup complete."

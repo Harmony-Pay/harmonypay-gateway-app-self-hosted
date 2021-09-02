@@ -11,7 +11,7 @@
     "harmony"
   ],
   "author": "Carlos Guimaraes",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "@ensdomains/address-encoder": "^0.2.6",
     "@harmony-js/core": "^0.1.57",

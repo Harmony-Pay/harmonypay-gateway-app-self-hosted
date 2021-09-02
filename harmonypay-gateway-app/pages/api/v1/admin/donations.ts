@@ -27,7 +27,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     result: "ok",
     token: JSON.stringify(token, null, 2),
     data: donations,
-    message: "admin donations info sent to http:\/\/api.harmonypay.test\/"
+    message: "admin donations info sent to http:\/\/api.harmonypay.one\/"
   })
 
   return res;

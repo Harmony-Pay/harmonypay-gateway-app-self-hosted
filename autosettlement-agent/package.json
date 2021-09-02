@@ -6,9 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "blockchain",
+    "harmony"
+  ],
+  "author": "Carlos Guimaraes",
+  "license": "MIT",
   "dependencies": {
     "axios": "^0.21.1",
     "binance-api-node": "^0.11.10",

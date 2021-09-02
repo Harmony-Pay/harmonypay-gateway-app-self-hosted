@@ -30,6 +30,10 @@ export default async function settingsEnv() {
       dbUsername: fileEnvLocalParsed.DB_USERNAME.replace(regex, ''), //postgres
       dbPassword: fileEnvLocalParsed.DB_PASSWORD.replace(regex, ''), //harmonypay
       
+      settlementInterval: fileEnvLocalParsed.SETTLEMENT_INTERVAL.replace(regex, ''), // 6 min
+      settlementBinanceMin: fileEnvLocalParsed.SETTLEMENT_BINANCE_MIN.replace(regex, ''), // 11$ min amount to be settled
+      settlementCryptocomMin: fileEnvLocalParsed.SETTLEMENT_CRYPTOCOM_MIN.replace(regex, ''), // 1$ min amount to be settled
+
       appleId: fileEnvLocalParsed.APPLE_ID.replace(regex, ''),
       appleTeamId: fileEnvLocalParsed.APPLE_TEAM_ID.replace(regex, ''),
       applePrivateKey: fileEnvLocalParsed.APPLE_PRIVATE_KEY.replace(regex, ''),

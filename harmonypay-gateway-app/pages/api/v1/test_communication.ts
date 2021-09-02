@@ -9,7 +9,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   res.status(200).send({
     result: "ok",
     token: JSON.stringify(token, null, 2),
-    message: "test_communication sent to http:\/\/api.harmonypay.test\/"
+    message: "test_communication sent to http:\/\/api.harmonypay.one\/"
   })
 
   return res;

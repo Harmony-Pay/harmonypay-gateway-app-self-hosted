@@ -18,7 +18,7 @@ import AccountForm from "./account";
 import WordpressForm from "./wordpress";
 import DatabaseForm from "./database";
 //import NotificationForm from "./notification";
-//import AutosettlementForm from "./autosettlement";
+import AutosettlementForm from "./autosettlement";
 
 type FormInputs = {
   NodeEnv: string
@@ -37,6 +37,9 @@ type FormInputs = {
   dbName: string
   dbUsername: string
   dbPassword: string
+  settlementInterval: string
+  settlementBinanceMin: string
+  settlementCryptocomMin: string
 }
 
 function FormSettings(props: FormInputs) {
@@ -48,22 +51,15 @@ function FormSettings(props: FormInputs) {
 
     // a submit function that will execute upon form submission
     const onSubmit = (data: FormInputs) => { 
-        // send "values" to database
-        //console.log(data);
 
         axios.post(`/api/v1/admin/settings/save`, data)
           .then((response: any) => {
-              //access the resp here....
-              //var payload = response.statusText;
-              //console.log(`Settings saved: ${payload}`);
               Alert('success', 'Settings saved...', 'Settings saved with success...');
           })
           .catch((error: any) => {
               Alert('error', 'ERROR...', "OOPS that didn't work :(");
           });
     }
-
-    //console.log(initialState)
 
     if (props) {
       for (let [key, value] of Object.entries(props)) {
@@ -149,13 +145,13 @@ function FormSettings(props: FormInputs) {
                     className={settingform === 'wordpress' ? setTabClass(true) : setTabClass(false)}
                 >
                     <LinkIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                    Wordpress Settings
+                    Woocommerce Settings
                 </button>
                 </span>
               </p>
             </div>
 
-            {/*<div className="px-4 sm:px-0 mb-3">
+            <div className="px-4 sm:px-0 mb-3">
               <p className="mt-1 text-sm text-gray-600">
               <span>
                 <button
@@ -168,7 +164,7 @@ function FormSettings(props: FormInputs) {
                 </button>
                 </span>
               </p>
-            </div>*/}
+            </div>
 
             <div className="px-4 sm:px-0 mb-3">
               <p className="mt-1 text-sm text-gray-600">
@@ -208,7 +204,7 @@ function FormSettings(props: FormInputs) {
                     {settingform === 'account' && <AccountForm register={register} /> }
                     {settingform === 'general' && <GeneralForm register={register} /> }
                     {settingform === 'wordpress' && <WordpressForm register={register} setValue={setValue} /> }
-                    {/*settingform === 'autosettlement' && <AutosettlementForm register={register} />*/ }
+                    {settingform === 'autosettlement' && <AutosettlementForm register={register} /> }
                     {settingform === 'database' && <DatabaseForm register={register} /> }
                     {/*settingform === 'notification' && <NotificationForm register={register} />*/ }
                   </div>

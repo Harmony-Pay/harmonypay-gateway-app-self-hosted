@@ -190,7 +190,7 @@ async function makeSettlementCryptocom(cryptocom, pair, settlement_amount) {
             side: 'SELL',
             type: 'LIMIT',
             quantity: 3,
-            price: 0.16396,
+            price: 0.36396,
         });
 
         console.log('TestOrder --- ', order, {
@@ -198,7 +198,7 @@ async function makeSettlementCryptocom(cryptocom, pair, settlement_amount) {
             side: 'SELL',
             type: 'LIMIT',
             quantity: 3,
-            price: 0.16396,
+            price: 0.36396,
         }, order_status);
 
         const { data: orders, status: orders_status } = await cryptocom.api.private.getOpenOrders({
@@ -240,9 +240,12 @@ async function makeSettlementCryptocom(cryptocom, pair, settlement_amount) {
 
 }
 
+const interval_check_settlement = process.env.SETTLEMENT_INTERVAL;
+const min_settlement_cryptocom = process.env.SETTLEMENT_CRYPTOCOM_MIN;
+const min_settlement_binance = process.env.SETTLEMENT_BINANCE_MIN;
 
-cron.schedule('*/6 * * * *', async() => {
-    console.log('running a autosettlement task every six(6) minutes');
+cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
+    console.log(`running a autosettlement task every six(${interval_check_settlement}) minutes`);
     //check binance settlements
     let pairs_binance = await getSettlementsPairsQuery('binance', 0);
     console.log(pairs_binance);
@@ -273,8 +276,14 @@ cron.schedule('*/6 * * * *', async() => {
                 return false;
             }
 
+            if (usd_amount < parseFloat(min_settlement_binance)) {
+                console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements ${min_settlement_binance}USD)`);
+                return false;
+            }
+
+
             if (usd_amount < 11) {
-                console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements USD$11(binance))`);
+                console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements $11USD(binance))`);
                 return false;
             }
 
@@ -336,8 +345,13 @@ cron.schedule('*/6 * * * *', async() => {
             return false;
         }
 
+        if (usd_amount < parseFloat(min_settlement_cryptocom)) {
+            console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements ${min_settlement_cryptocom}USD)`);
+            return false;
+        }
+
         if (usd_amount < 1) {
-            console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements USD$1)`);
+            console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements $1USD)`);
             return false;
         }
 
@@ -366,4 +380,4 @@ cron.schedule('*/6 * * * *', async() => {
 
 });
 
-console.info(`[${network_mode}] [Autosettlement Agent] Running every 6 minutes...`)
+console.info(`[${network_mode}] [Autosettlement Agent] Running every ${interval_check_settlement} minutes...`)
