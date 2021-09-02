@@ -57,6 +57,10 @@ cd harmonypay-gateway-app
 cp ../utils/.env.sample .env
 npm install
 cd ..
+echo "Building Harmonypay database"
+cd utils
+/bin/bash dbsetup.sh
+cd ..
 echo "Building Harmonypay gateway application."
 npm run build:gateway
 echo "Running Harmonypay gateway..."

@@ -14,11 +14,35 @@ export async function resetEnviroment(api_server_url: string) {
         nextauthUrl: `${api_server_url}`,
         nextauthUsername: 'harmonypay',
         nextauthPassword: 'harmonypay',
+        secret: 'secret here',
+        wpSiteUrl: '',
+        woocommerceWebhookUrl: '',
+        woocommerceSignatureSecret: '',
         dbHost: 'localhost',
-        dbPort: '5532',
+        dbPort: '5432',
         dbName: 'harmonypaydb',
         dbUsername: 'postgres',
-        dbPassword: 'harmonypay'
+        dbPassword: 'harmonypay',
+        settlementInterval: '6',
+        settlementBinanceMin: '11',
+        settlementCryptocomMin: '3',
+        appleId: '',
+        appleTeamId: '',
+        applePrivateKey: '',
+        appleKeyId: '',
+        auth0Id: '',
+        auth0Secret: '',
+        auth0Domain: '',
+        facebookId: '',
+        facebookSecret: '',
+        githubId: '',
+        github_secret: '',
+        googleId: '',
+        googleSecret: '',
+        twitterId: '',
+        twitterSecret: '',
+        emailServer: '', //smtp://username:password@smtp.example.com.com:587
+        emailFrom: '', //NextAuth <noreply@example.com>
     }
 
     axios.post(`/api/v1/admin/settings/save`, envdata)
