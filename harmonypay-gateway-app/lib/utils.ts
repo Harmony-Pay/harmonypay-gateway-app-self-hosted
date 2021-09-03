@@ -43,9 +43,10 @@ export async function resetEnviroment(api_server_url: string) {
         twitterSecret: '',
         emailServer: '', //smtp://username:password@smtp.example.com.com:587
         emailFrom: '', //NextAuth <noreply@example.com>
+        databaseUrl: 'sqlite://localhost/:memory:?synchronize=true'
     }
 
-    axios.post(`/api/v1/admin/settings/save`, envdata)
+    await axios.post(`/api/v1/admin/settings/save`, envdata)
     .then((response: any) => {
         console.log('ok')
         return response

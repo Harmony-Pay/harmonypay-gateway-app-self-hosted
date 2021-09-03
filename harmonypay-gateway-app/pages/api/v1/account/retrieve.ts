@@ -60,7 +60,7 @@ const execRatesQuery = async () => {
     return await axios.get(endpoint, {
       params: {
         ids: 'harmony,bitcoin,ethereum,binancecoin,binance-usd',
-        vs_currencies: 'usd',
+        vs_currencies: 'gbp,usd,aud,eur,cad,rub,brl',
         include_last_updated_at: true,
       }
     })
@@ -77,7 +77,7 @@ const getCurrencyRatesQuery = async () => {
   return await axios.get(endpoint, {
     params: {
       from: 'USD',
-      to: 'GBP,CAD,EUR,BRL'
+      to: 'GBP,CAD,AUD,EUR,RUB,BRL'
     }
   })
   .then((result) => { 
@@ -89,7 +89,7 @@ const getCurrencyRatesQuery = async () => {
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextApiResponse> => {
   const token = await getToken({ req, secret })
-  console.log("retrieve_account sent to https:\/\/harmonypay.one\/", token)
+  console.log("retrieve_account sent to https:\/\/api.harmonypay.one\/", token)
   console.log("/v1/account/retrieve req === ", req.body)
   const cryptocurrency_rates = await execRatesQuery()
   const currency_rates = await getCurrencyRatesQuery()
@@ -118,7 +118,6 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextAp
   _rates.BUSD = 1/parseFloat(cryptocurrency_rates['binance-usd'].usd)
 
   const payments_used = await countOrdersQuery()
-
 
   res.status(200).send({
     harmonypay: {

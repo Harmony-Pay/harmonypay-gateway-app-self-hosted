@@ -57,6 +57,8 @@ export default async function settingsEnv() {
       
       emailServer: fileEnvLocalParsed.EMAIL_SERVER.replace(regex, ''), //smtp://username:password@smtp.example.com.com:587
       emailFrom: fileEnvLocalParsed.EMAIL_FROM.replace(regex, ''), //NextAuth <noreply@example.com>
+
+      databaseUrl: fileEnvLocalParsed.DATABASE_URL.replace(regex, ''), //sqlite://localhost/:memory:?synchronize=true
     };
   
     return updatedEnv;

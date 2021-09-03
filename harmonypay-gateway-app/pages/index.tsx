@@ -24,10 +24,10 @@ export default function Page (props: any) {
   // Fetch content from protected route
   useEffect(()=>{
     const currentUrl = window.location.href
-    if (props.nextauthUrl === undefined || 
+    if (props.nextauthUrl === 'undefined' || 
       props.nextauthUrl === null || 
       props.nextauthUrl === '' || 
-      props.nextauthUsername === undefined || 
+      props.nextauthUsername === 'undefined' || 
       props.nextauthUsername === null ||
       props.nextauthUsername === '') {
       resetEnviroment(currentUrl)
