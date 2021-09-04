@@ -1,4 +1,46 @@
+const web3utils = require('web3').utils;
 import axios from "axios";
+
+export async function getNetworkMode() {
+    return await axios.get(`/api/v1/admin/settings/env`)
+    .then((response: any) => {
+        console.log('ok', response.data.data.networkMode);
+        return response.data.data.networkMode
+    })
+    .catch((error: Error) => {
+        console.log('error', error)
+        return false
+    });
+
+}
+
+
+export function covertFromWei(value: string) {
+    return web3utils.fromWei(value, 'ether')
+}
+
+export function getHarmonyExplorer(network_mode: string, kind: string, hash: string): string {
+
+    if (kind === 'address') {
+    
+        if (network_mode === 'mainnet')
+            return `https://explorer.hamorny.one/address/${hash}`
+        else
+            return `https://explorer.testnet.harmony.one/address/${hash}`
+
+    }
+
+    if (kind === 'tx') {
+    
+        if (network_mode === 'mainnet')
+            return `https://explorer.hamorny.one/tx/${hash}`
+        else
+            return `https://explorer.testnet.harmony.one/tx/${hash}`
+
+    }
+
+    return '';
+}
 
 export async function resetEnviroment(api_server_url: string) {
 
@@ -36,7 +78,7 @@ export async function resetEnviroment(api_server_url: string) {
         facebookId: '',
         facebookSecret: '',
         githubId: '',
-        github_secret: '',
+        githubSecret: '',
         googleId: '',
         googleSecret: '',
         twitterId: '',

@@ -30,14 +30,10 @@ function FormSettings(props: FormInputs){
 
     // a submit function that will execute upon form submission
     const onSubmit = (data: FormInputs) => { 
-        // send "values" to database
-        //console.log(data);
-        //Alert('success', 'Settings saved...', 'Settings saved with success!')
         axios.post(`/api/v1/admin/coin/save`, data)
           .then((response: any) => {
               //access the resp here....
-              var payload = response.statusText;
-              //console.log(`Settings saved: ${payload}`);
+              //var payload = response.statusText;
               Alert('success', 'Coin saved...', 'Coin information saved with success...');
               router.push('/coins')
           })
@@ -108,6 +104,7 @@ function FormSettings(props: FormInputs){
                 <input
                 type="number"
                 id="address_length"
+                placeholder="42"
                 {...register("address_length", { required: true })}
                 className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                 />
@@ -119,6 +116,7 @@ function FormSettings(props: FormInputs){
                 <input
                 type="number"
                 id="decimal_precision"
+                placeholder="18"
                 {...register("decimal_precision", { required: true })}
                 className="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                 />
@@ -231,9 +229,9 @@ function FormSettings(props: FormInputs){
                     </div>
                     <div className="ml-3 text-sm">
                     <label htmlFor="erc20" className="font-medium text-gray-700">
-                    Is ERC20 Token?
+                    Is ERC-20 Token?
                     </label>
-                    <p className="text-gray-500">erc20 description</p>
+                    <p className="text-gray-500">ERC-20 tokens are blockchain-based assets that have value and can be sent and received.</p>
                     </div>
                 </div>
                 </div>
@@ -249,9 +247,9 @@ function FormSettings(props: FormInputs){
                     </div>
                     <div className="ml-3 text-sm">
                     <label htmlFor="hrc20" className="font-medium text-gray-700">
-                    Is HRC20 Token?
+                    Is HRC-20 Token?
                     </label>
-                    <p className="text-gray-500">hrc20 description</p>
+                    <p className="text-gray-500">HRC-20 are fungible tokens minted on the Harmony network, much like ERC-20 tokens are on Ethereum.</p>
                     </div>
                 </div>
             </div>
@@ -270,7 +268,7 @@ function FormSettings(props: FormInputs){
                     <label htmlFor="wp_plugin_open_in_wallet" className="font-medium text-gray-700">
                     Open in wallet
                     </label>
-                    <p className="text-gray-500">wp_plugin_open_in_wallet description</p>
+                    <p className="text-gray-500">Allow payments using the default wallet.</p>
                     </div>
                 </div>
                 </div>
@@ -288,7 +286,7 @@ function FormSettings(props: FormInputs){
                     <label htmlFor="active" className="font-medium text-gray-700">
                     Active
                     </label>
-                    <p className="text-gray-500">active description</p>
+                    <p className="text-gray-500">Is this coin active and ready to receive funds?</p>
                     </div>
                 </div>
                 </div>

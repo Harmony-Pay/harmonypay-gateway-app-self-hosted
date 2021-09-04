@@ -66,8 +66,8 @@ export default function Page (props: any) {
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
                                             <div className="flex-shrink-0 h-10 w-10">
-                                                <Link href={`/details/${field.id}`}>
-                                                <a href={`/details/${field.id}`}>
+                                                <Link href={`/donation-details/${field.id}`}>
+                                                <a href={`/donation-details/${field.id}`}>
                                                 <svg className="flex-shrink-0 h-6 w-6 mr-1" viewBox="0 0 24 24">
                                                 <path className="fill-current text-gray-600 false" d="M20 7a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 0120 7zM4 23a.75.75 0 01-.75-.75 1.5 1.5 0 00-1.5-1.5.75.75 0 110-1.5 1.5 1.5 0 001.5-1.5.75.75 0 111.5 0 1.5 1.5 0 001.5 1.5.75.75 0 110 1.5 1.5 1.5 0 00-1.5 1.5A.75.75 0 014 23z">
                                                 </path>
@@ -78,8 +78,8 @@ export default function Page (props: any) {
                                                 </Link>
                                             </div>
                                             <div className="ml-0">
-                                                <Link href={`/details/${field.id}`}>
-                                                <a href={`/details/${field.id}`}>
+                                                <Link href={`/donation-details/${field.id}`}>
+                                                <a href={`/donation-details/${field.id}`}>
                                                     <div className="text-sm font-medium text-gray-900">ID #{field.id}</div>
                                                     <div className="text-xs font-medium text-gray-600"># {field.transaction_id.substr(0, 19)}...</div>
                                                 </a>
@@ -100,7 +100,7 @@ export default function Page (props: any) {
                                             ? "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
                                             : "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"
                                             }>
-                                            {field.status ? 'Complete' : 'Pendent'}
+                                            {field.status ? 'Complete' : 'Pending'}
                                         </span>
                                     </td>
 

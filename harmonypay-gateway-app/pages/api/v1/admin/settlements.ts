@@ -22,7 +22,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return res
   }
   const settlements = await getSettlementsQuery()
-  console.log()
+
   res.status(200).send({
     result: "ok",
     token: JSON.stringify(token, null, 2),

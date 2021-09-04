@@ -6,7 +6,6 @@ const secret = process.env.SECRET
 
 export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextApiResponse> =>  {
   const token = await getToken({ req, secret })
-  //let paymentId = null //Math.random()
   console.log("/v1/payment/add req === ", req.body)
   for (let key in req.body) {
     let orderData = JSON.parse(key)

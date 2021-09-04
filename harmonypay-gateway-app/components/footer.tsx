@@ -8,18 +8,15 @@ export default function Footer() {
       <hr />
       <ul className={styles.navItems}>
         <li className={styles.navItem}>
-          <a href="https://pay.dezigne.co.uk/">Documentation</a>
+          <a href="https://harmonypay.one/">Documentation</a>
         </li>
         <li className={styles.navItem}>
-          <a href="https://github.com/nextauthjs/next-auth-example">GitHub</a>
+          <a href="https://github.com/sekmet/harmonypay-gateway-app">GitHub</a>
         </li>
         <li className={styles.navItem}>
           <Link href="/policy">
             <a>Policy</a>
           </Link>
-        </li>
-        <li className={styles.navItem}>
-          <em>harmonypay@{packageInfo.dependencies["next-auth"]}</em>
         </li>
       </ul>
     </footer>

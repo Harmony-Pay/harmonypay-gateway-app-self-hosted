@@ -47,7 +47,7 @@ export default async function settingsEnv() {
       facebookSecret: fileEnvLocalParsed.FACEBOOK_SECRET.replace(regex, ''),
       
       githubId: fileEnvLocalParsed.GITHUB_ID.replace(regex, ''),
-      github_secret: fileEnvLocalParsed.GITHUB_SECRET.replace(regex, ''),
+      githubSecret: fileEnvLocalParsed.GITHUB_SECRET.replace(regex, ''),
       
       googleId: fileEnvLocalParsed.GOOGLE_ID.replace(regex, ''),
       googleSecret: fileEnvLocalParsed.GOOGLE_SECRET.replace(regex, ''),

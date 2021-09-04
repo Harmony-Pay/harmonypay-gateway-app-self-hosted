@@ -118,10 +118,6 @@ export default function Page (props: any) {
 
                       </div>
                     </td>
-                    {/*<td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{person.title}</div>
-                      <div className="text-sm text-gray-500">{person.department}</div>
-                      </td>*/}
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={coin.active ? "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800" : "px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800"}>
                         {coin.active ? 'Active' : 'Disabled'}
@@ -130,15 +126,13 @@ export default function Page (props: any) {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{coin.token_group}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-bold">
                     <Link href={`/coin-details/${coin.id}`}>
-                      <a href={`/coin-details/${coin.id}`} className="text-indigo-600 hover:text-indigo-900">
+                      <button type="button" className="py-1 px-2 bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-sm font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg">
                         Update
-                      </a>
+                      </button>
                     </Link>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <a href="#" onClick={() => confirmRemove(coin.id, router)} className="text-red-600 hover:text-red-900">
-                        X
-                      </a>
+                    <button type="button" onClick={() => confirmRemove(coin.id, router)} className="py-1 px-2 flex justify-center items-center bg-red-600 hover:bg-red-700 focus:ring-red-500 focus:ring-offset-red-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 w-7 h-7 rounded-lg">X</button>
                     </td>
                   </tr>
                 ))}

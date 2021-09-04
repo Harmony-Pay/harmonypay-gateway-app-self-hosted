@@ -7,7 +7,7 @@ const secret = process.env.SECRET
 async function getOrdersQuery(id: any) {
 
     const result = await pool.query(
-      `SELECT * FROM api.settlements WHERE id = $1`,
+      `SELECT * FROM api.donations WHERE id = $1`,
       [id]
     )
   
@@ -22,12 +22,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
     return res
   }
   const data = await getOrdersQuery(req.query.id)
-  const settlement = data[0]
+  const donation = data[0]
   res.status(200).send({
     result: "ok",
     token: JSON.stringify(token, null, 2),
-    data: settlement,
-    message: "admin settlement info sent to http:\/\/api.harmonypay.one\/"
+    data: donation,
+    message: "admin donation info sent to http:\/\/api.harmonypay.one\/"
   })
 
   return res;

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Layout from '../components/layout'
 import { signIn } from 'next-auth/client'
 import { useSession } from 'next-auth/client'
-import AccessDenied from '../components/access-denied'
+//import AccessDenied from '../components/access-denied'
 import WelcomeBanner from '../components/welcome-banner'
 import settingsEnv from '../lib/envfile'
 import { resetEnviroment } from '../lib/utils'
@@ -19,7 +19,7 @@ export async function getStaticProps() {
 
 export default function Page (props: any) {
   const [ session, loading ] = useSession()
-  const [ content , setContent ] = useState()
+  //const [ content , setContent ] = useState()
 
   // Fetch content from protected route
   useEffect(()=>{
@@ -93,7 +93,7 @@ export default function Page (props: any) {
                   d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <p>http://wpaddress.com</p>
+              <p><a href={props.wpSiteUrl} target="_blank">{props.wpSiteUrl}</a></p>
             </div>
             <div className="flex space-x-2 text-gray-400 text-sm my-3">
               {/* svg */}

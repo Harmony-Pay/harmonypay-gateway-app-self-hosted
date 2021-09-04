@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/client'
 import dayjs from 'dayjs'
-import Link from "next/link"
 import Layout from '../../components/layout'
 import { useRouter } from 'next/router'
 import AccessDenied from '../../components/access-denied'
@@ -16,7 +15,7 @@ export default function Page (props: any) {
   // Fetch content from protected route
   useEffect(()=>{
     const fetchData = async () => {
-      const res = await fetch(`/api/v1/admin/settlement/${id}`)
+      const res = await fetch(`/api/v1/admin/donation/${id}`)
       const json = await res.json()
       //console.log(json)
       if (json.data) { setContent(json.data) }
@@ -35,22 +34,14 @@ export default function Page (props: any) {
     <Layout>
       <div className="bg-white shadow overflow-hidden sm:rounded-lg">
       <div className="px-4 py-5 sm:px-6">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">Settlement Information</h3>
-        <p className="mt-1 max-w-2xl text-sm text-gray-500">Auto Settlement details.</p>
+        <h3 className="text-lg leading-6 font-medium text-gray-900">Donation Information</h3>
+        <p className="mt-1 max-w-2xl text-sm text-gray-500">Donation / Transaction details.</p>
       </div>
       <div className="border-t border-gray-200">
         <dl>
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Order ID</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{content.order_id}</dd>
-          </div>
-          <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Pair</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{content.settlement_pair}</dd>
-          </div>
-          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Type</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{content.settlement_type}</dd>
+            <dt className="text-sm font-medium text-gray-500">Donation ID</dt>
+            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{content.id}</dd>
           </div>
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">Amount</dt>
@@ -59,8 +50,16 @@ export default function Page (props: any) {
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">To Address</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <a href={getHarmonyExplorer('testnet','address',content.to_address)} target="_blank">  
+            <a href={getHarmonyExplorer('testnet','address',content.to_address)} target="_blank">
               {content.to_address}
+            </a>  
+            </dd>
+          </div>
+          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
+            <dt className="text-sm font-medium text-gray-500">From Address</dt>
+            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+            <a href={getHarmonyExplorer('testnet','address',content.from_address)} target="_blank">
+              {content.from_address}
             </a>  
             </dd>
           </div>
@@ -68,18 +67,10 @@ export default function Page (props: any) {
             <dt className="text-sm font-medium text-gray-500">Created At</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">{dayjs(content.created_at).format('MMMM D, YYYY h:mm A')}</dd>
           </div>
-          <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-            <dt className="text-sm font-medium text-gray-500">Settlement Details</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <strong>{content && content.settlement_info && `${content.settlement_info.type}`.toUpperCase()}</strong><br/>
-              {content && content.settlement_info && content.settlement_info.binance_settlement_currency}
-            </dd>
-          </div>
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-          <dt className="text-sm font-medium text-gray-500">Settlement Order</dt>
-            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              {JSON.stringify(content.order_info, null, 2)}
-            </dd>
+
+
+
           </div>
         </dl>
       </div>
