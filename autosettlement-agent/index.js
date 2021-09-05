@@ -343,17 +343,17 @@ cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
         let accountBalance = accountCryptocom.data.result.accounts[0].available;
         if (parseFloat(accountBalance) < parseFloat(total_settlement)) {
             console.log(`[!CRYPTO.COM] Balance available (${accountBalance} ONE) BELLOW settlement requirements (${total_settlement} ONE)`);
-            //return false;
+            return false;
         }
 
         if (usd_amount < parseFloat(min_settlement_cryptocom)) {
             console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements ${min_settlement_cryptocom}USD)`);
-            //return false;
+            return false;
         }
 
         if (usd_amount < 1) {
             console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements $1USD)`);
-            //return false;
+            return false;
         }
 
         console.log(
