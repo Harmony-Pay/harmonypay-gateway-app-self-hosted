@@ -240,145 +240,159 @@ async function makeSettlementCryptocom(cryptocom, pair, settlement_amount) {
 
 }
 
+async function checkBinanceSettlements() {
+
+        //check binance settlements
+        let pairs_binance = await getSettlementsPairsQuery('binance', 0);
+        console.log('binance pair - ', pairs_binance);
+        pairs_binance.map(async pair_settle => {
+                let binance_settlements = await getOpenSettlementsQuery('binance', pair_settle.settlement_pair, 0);
+                //console.log(binance_settlements);
+                if (binance_settlements !== null 
+                    && binance_settlements.length 
+                    && binance_settlements[0].settlement_info
+                    && binance_settlements[0].settlement_info.binance_api_key
+                    && binance_settlements[0].settlement_info.binance_api_secret) {
+      
+                const binance = Binance({
+                    apiKey: binance_settlements[0].settlement_info.binance_api_key, // Get this from your account on binance.com
+                    apiSecret: binance_settlements[0].settlement_info.binance_api_secret, // Same for this
+                });
+    
+                let total_settlement = binance_settlements.reduce((a, b) => a + (parseFloat(b['amount']) || 0), 0);
+    
+                //for (var key_settlement in total_settlement) {
+                let settlement_order_id = binance_settlements[0].order_id
+                let settlement_currency = binance_settlements[0].settlement_info.binance_settlement_currency;
+                let avgPrice = await getPairBinanceAvgPrice(binance, pair_settle.settlement_pair);
+                let usd_amount = total_settlement * parseFloat(avgPrice.price);
+                let accountBinance = await getPairBinanceAcountSummary(binance);
+                if (parseFloat(accountBinance.free) < parseFloat(total_settlement)) {
+                    console.log(`[!BINANCE] Balance available (${accountBinance.free} ONE) BELLOW settlement requirements (${total_settlement} ONE)`);
+                    return false;
+                }
+    
+                if (usd_amount < parseFloat(min_settlement_binance)) {
+                    console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements ${min_settlement_binance}USD)`);
+                    return false;
+                }
+    
+    
+                if (usd_amount < 11) {
+                    console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements $11USD(binance))`);
+                    return false;
+                }
+    
+    
+                console.log(
+                    avgPrice.price,
+                    pair_settle.settlement_pair,
+                    total_settlement,
+                    usd_amount,
+                    settlement_currency,
+                    accountBinance.free,
+                    'ONE'
+                );
+    
+                let settlement_order = await makeSettlementBinance(binance, pair_settle.settlement_pair, Math.round(total_settlement));
+                console.log(settlement_order);
+    
+                if (settlement_order) {
+                    let order_settled = await updateOrderSettlement(settlement_order_id, settlement_order);
+                    console.log(order_settled);
+                    return true;
+                }
+    
+                //end if settlements exists
+                }
+            })
+            //}
+    
+
+}
+
+async function checkCryptocomSettlements() {
+
+        //check cryptocom settlements
+        let pairs_cryptocom = await getSettlementsPairsQuery('cryptocom', 0);
+        console.log('cryptocom pair - ', pairs_cryptocom);
+        pairs_cryptocom.map(async pair_settle => {
+            let cryptocom_settlements = await getOpenSettlementsQuery('cryptocom', pair_settle.settlement_pair, 0);
+    
+            if (cryptocom_settlements !== null
+                && cryptocom_settlements.length 
+                && cryptocom_settlements[0].settlement_info
+                && cryptocom_settlements[0].settlement_info.cryptocom_api_key
+                && cryptocom_settlements[0].settlement_info.cryptocom_api_secret) {
+    
+            const cryptocom = {
+                api: new CryptoApi(cryptocom_settlements[0].settlement_info.cryptocom_api_key, cryptocom_settlements[0].settlement_info.cryptocom_api_secret),
+                currency: Currency
+            }
+    
+            //console.log(cryptocom_settlements);
+            let total_settlement = cryptocom_settlements.reduce((a, b) => a + (parseFloat(b['amount']) || 0), 0);
+    
+            //hack ONE pair _
+            let cryptocom_pair = `${pair_settle.settlement_pair}`.replace('ONE', 'ONE_')
+                //for (var key_settlement in total_settlement) {
+            let settlement_order_id = cryptocom_settlements[0].order_id
+            let settlement_currency = cryptocom_settlements[0].settlement_info.cryptocom_settlement_currency;
+            let avgPrice = await getPairCryptocomAvgPrice(cryptocom, cryptocom_pair);
+            let usd_amount = total_settlement * parseFloat(avgPrice.result.data.k);
+            let accountCryptocom = await getPairCryptocomAcountSummary(cryptocom, 'ONE');
+            let accountBalance = accountCryptocom.data.result.accounts[0].available;
+            if (parseFloat(accountBalance) < parseFloat(total_settlement)) {
+                console.log(`[!CRYPTO.COM] Balance available (${accountBalance} ONE) BELLOW settlement requirements (${total_settlement} ONE)`);
+                return false;
+            }
+    
+            if (usd_amount < parseFloat(min_settlement_cryptocom)) {
+                console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements ${min_settlement_cryptocom}USD)`);
+                return false;
+            }
+    
+            if (usd_amount < 1) {
+                console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements $1USD)`);
+                return false;
+            }
+    
+            console.log(
+                avgPrice.result.data.k,
+                cryptocom_pair,
+                pair_settle.settlement_pair,
+                total_settlement,
+                usd_amount,
+                settlement_currency,
+                accountBalance,
+                'ONE'
+            );
+    
+            let settlement_order = await makeSettlementCryptocom(cryptocom, cryptocom_pair, Math.round(total_settlement));
+            console.log(settlement_order);
+    
+            if (settlement_order) {
+                let order_settled = await updateOrderSettlement(settlement_order_id, settlement_order);
+                console.log(order_settled);
+                return true;
+            }
+    
+            //end if settlements exists
+            }
+        });
+}
+
+
 const interval_check_settlement = process.env.SETTLEMENT_INTERVAL;
 const min_settlement_cryptocom = process.env.SETTLEMENT_CRYPTOCOM_MIN;
 const min_settlement_binance = process.env.SETTLEMENT_BINANCE_MIN;
 
 cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
     console.log(`running a autosettlement task every six(${interval_check_settlement}) minutes`);
-
-    //check binance settlements
-    let pairs_binance = await getSettlementsPairsQuery('binance', 0);
-    console.log('binance pair - ', pairs_binance);
-    pairs_binance.map(async pair_settle => {
-            let binance_settlements = await getOpenSettlementsQuery('binance', pair_settle.settlement_pair, 0);
-            //console.log(binance_settlements);
-            if (binance_settlements !== null 
-                && binance_settlements.length 
-                && binance_settlements[0].settlement_info
-                && binance_settlements[0].settlement_info.binance_api_key
-                && binance_settlements[0].settlement_info.binance_api_secret) {
-  
-            const binance = Binance({
-                apiKey: binance_settlements[0].settlement_info.binance_api_key, // Get this from your account on binance.com
-                apiSecret: binance_settlements[0].settlement_info.binance_api_secret, // Same for this
-            });
-
-            let total_settlement = binance_settlements.reduce((a, b) => a + (parseFloat(b['amount']) || 0), 0);
-
-            //for (var key_settlement in total_settlement) {
-            let settlement_order_id = binance_settlements[0].order_id
-            let settlement_currency = binance_settlements[0].settlement_info.binance_settlement_currency;
-            let avgPrice = await getPairBinanceAvgPrice(binance, pair_settle.settlement_pair);
-            let usd_amount = total_settlement * parseFloat(avgPrice.price);
-            let accountBinance = await getPairBinanceAcountSummary(binance);
-            if (parseFloat(accountBinance.free) < parseFloat(total_settlement)) {
-                console.log(`[!BINANCE] Balance available (${accountBinance.free} ONE) BELLOW settlement requirements (${total_settlement} ONE)`);
-                //return false;
-            }
-
-            if (usd_amount < parseFloat(min_settlement_binance)) {
-                console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements ${min_settlement_binance}USD)`);
-                //return false;
-            }
-
-
-            if (usd_amount < 11) {
-                console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements $11USD(binance))`);
-                //return false;
-            }
-
-
-            console.log(
-                avgPrice.price,
-                pair_settle.settlement_pair,
-                total_settlement,
-                usd_amount,
-                settlement_currency,
-                accountBinance.free,
-                'ONE'
-            );
-
-            let settlement_order = await makeSettlementBinance(binance, pair_settle.settlement_pair, Math.round(total_settlement));
-            console.log(settlement_order);
-
-            if (settlement_order) {
-                let order_settled = await updateOrderSettlement(settlement_order_id, settlement_order);
-                console.log(order_settled);
-            }
-
-            //end if settlements exists
-            }
-        })
-        //}
-
-    //check cryptocom settlements
-    let pairs_cryptocom = await getSettlementsPairsQuery('cryptocom', 0);
-    console.log('cryptocom pair - ', pairs_cryptocom);
-    pairs_cryptocom.map(async pair_settle => {
-        let cryptocom_settlements = await getOpenSettlementsQuery('cryptocom', pair_settle.settlement_pair, 0);
-
-        if (cryptocom_settlements !== null
-            && cryptocom_settlements.length 
-            && cryptocom_settlements[0].settlement_info
-            && cryptocom_settlements[0].settlement_info.cryptocom_api_key
-            && cryptocom_settlements[0].settlement_info.cryptocom_api_secret) {
-
-        const cryptocom = {
-            api: new CryptoApi(cryptocom_settlements[0].settlement_info.cryptocom_api_key, cryptocom_settlements[0].settlement_info.cryptocom_api_secret),
-            currency: Currency
-        }
-
-        //console.log(cryptocom_settlements);
-        let total_settlement = cryptocom_settlements.reduce((a, b) => a + (parseFloat(b['amount']) || 0), 0);
-
-        //hack ONE pair _
-        let cryptocom_pair = `${pair_settle.settlement_pair}`.replace('ONE', 'ONE_')
-            //for (var key_settlement in total_settlement) {
-        let settlement_order_id = cryptocom_settlements[0].order_id
-        let settlement_currency = cryptocom_settlements[0].settlement_info.cryptocom_settlement_currency;
-        let avgPrice = await getPairCryptocomAvgPrice(cryptocom, cryptocom_pair);
-        let usd_amount = total_settlement * parseFloat(avgPrice.result.data.k);
-        let accountCryptocom = await getPairCryptocomAcountSummary(cryptocom, 'ONE');
-        let accountBalance = accountCryptocom.data.result.accounts[0].available;
-        if (parseFloat(accountBalance) < parseFloat(total_settlement)) {
-            console.log(`[!CRYPTO.COM] Balance available (${accountBalance} ONE) BELLOW settlement requirements (${total_settlement} ONE)`);
-            return false;
-        }
-
-        if (usd_amount < parseFloat(min_settlement_cryptocom)) {
-            console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements ${min_settlement_cryptocom}USD)`);
-            return false;
-        }
-
-        if (usd_amount < 1) {
-            console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements $1USD)`);
-            return false;
-        }
-
-        console.log(
-            avgPrice.result.data.k,
-            cryptocom_pair,
-            pair_settle.settlement_pair,
-            total_settlement,
-            usd_amount,
-            settlement_currency,
-            accountBalance,
-            'ONE'
-        );
-
-        let settlement_order = await makeSettlementCryptocom(cryptocom, cryptocom_pair, Math.round(total_settlement));
-        console.log(settlement_order);
-
-        if (settlement_order) {
-            let order_settled = await updateOrderSettlement(settlement_order_id, settlement_order);
-            console.log(order_settled);
-        }
-
-        //end if settlements exists
-        }
-    })
-
+    // check for binance settlements
+    await checkBinanceSettlements();
+    // check for cryptocom settlements
+    await checkCryptocomSettlements();
 });
 
 console.info(`[${network_mode}] [Autosettlement Agent] Running every ${interval_check_settlement} minutes...`)
