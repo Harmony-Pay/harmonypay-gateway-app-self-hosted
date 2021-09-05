@@ -9,7 +9,7 @@ import styles from "./header.module.css"
 // rendering, and avoids any flash incorrect content on initial page load.
 export default function Header() {
   const [session, loading] = useSession()
-  const [networkmode, setNetworkmode] = useState<string>()
+  const [networkmode, setNetworkmode] = useState()
 
   useEffect(()=>{
     const fetchData = async () => {

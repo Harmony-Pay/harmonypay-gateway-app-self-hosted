@@ -10,7 +10,7 @@ import { covertFromWei, getHarmonyExplorer } from '../../lib/utils'
 export default function Page (props: any) {
   const [ session, loading ] = useSession()
   const [ content , setContent ] = useState(props)
-  const [networkmode, setNetworkmode] = useState<string>()
+  const [networkmode, setNetworkmode] = useState()
 
   const router = useRouter()
   const { id } = router.query

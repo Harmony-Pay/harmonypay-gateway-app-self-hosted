@@ -19,7 +19,7 @@ export function covertFromWei(value: string) {
     return web3utils.fromWei(value, 'ether')
 }
 
-export function getHarmonyExplorer(network_mode: string, kind: string, hash: string): string {
+export function getHarmonyExplorer(network_mode: string|undefined, kind: string, hash: string): string {
 
     if (kind === 'address') {
     
