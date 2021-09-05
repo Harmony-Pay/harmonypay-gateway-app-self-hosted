@@ -72,7 +72,7 @@ export default function Page (props: any) {
             <dt className="text-sm font-medium text-gray-500">Settlement Details</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
               <strong>{content && content.settlement_info && `${content.settlement_info.type}`.toUpperCase()}</strong><br/>
-              {content && content.settlement_info && content.settlement_info.binance_settlement_currency}
+              {content && content.settlement_info && (content.settlement_info.type === 'binance' ? content.settlement_info.binance_settlement_currency : content.settlement_info.cryptocom_settlement_currency)}
             </dd>
           </div>
           <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
