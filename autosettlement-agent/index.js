@@ -249,7 +249,8 @@ async function checkBinanceSettlements() {
         //check binance settlements
         let pairs_binance = await getSettlementsPairsQuery('binance', 0);
         console.log('binance pair - ', pairs_binance);
-
+        if (pairs_binance === null) return false;
+        
         pairs_binance.map(async pair_settle => {
                 let binance_settlements = await getOpenSettlementsQuery('binance', pair_settle.settlement_pair, 0);
                 //console.log(binance_settlements);
@@ -312,8 +313,6 @@ async function checkBinanceSettlements() {
                 }
             })
             //}
-    
-
 }
 
 async function checkCryptocomSettlements() {
@@ -321,6 +320,7 @@ async function checkCryptocomSettlements() {
         //check cryptocom settlements
         let pairs_cryptocom = await getSettlementsPairsQuery('cryptocom', 0);
         console.log('cryptocom pair - ', pairs_cryptocom);
+        if (pairs_cryptocom === null) return false;
 
         pairs_cryptocom.map(async pair_settle => {
             let cryptocom_settlements = await getOpenSettlementsQuery('cryptocom', pair_settle.settlement_pair, 0);
@@ -392,10 +392,10 @@ async function checkCryptocomSettlements() {
 cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
     console.log(`running a autosettlement task every six(${interval_check_settlement}) minutes`);
     // check for binance settlements
-    await checkBinanceSettlements();
+    checkBinanceSettlements();
     // check for cryptocom settlements
-    await checkCryptocomSettlements();
-    return true;
+    checkCryptocomSettlements();
+
 });
 
 console.info(`[${network_mode}] [Autosettlement Agent] Running every ${interval_check_settlement} minutes...`)
