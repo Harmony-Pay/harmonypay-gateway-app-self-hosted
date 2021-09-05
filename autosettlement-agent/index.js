@@ -248,7 +248,7 @@ cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
     console.log(`running a autosettlement task every six(${interval_check_settlement}) minutes`);
     //check binance settlements
     let pairs_binance = await getSettlementsPairsQuery('binance', 0);
-    console.log(pairs_binance);
+
     pairs_binance.map(async pair_settle => {
             let binance_settlements = await getOpenSettlementsQuery('binance', pair_settle.settlement_pair, 0);
             //console.log(binance_settlements);
