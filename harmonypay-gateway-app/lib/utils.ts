@@ -24,7 +24,7 @@ export function getHarmonyExplorer(network_mode: string, kind: string, hash: str
     if (kind === 'address') {
     
         if (network_mode === 'mainnet')
-            return `https://explorer.hamorny.one/address/${hash}`
+            return `https://explorer.harmony.one/address/${hash}`
         else
             return `https://explorer.testnet.harmony.one/address/${hash}`
 
@@ -33,7 +33,7 @@ export function getHarmonyExplorer(network_mode: string, kind: string, hash: str
     if (kind === 'tx') {
     
         if (network_mode === 'mainnet')
-            return `https://explorer.hamorny.one/tx/${hash}`
+            return `https://explorer.harmony.one/tx/${hash}`
         else
             return `https://explorer.testnet.harmony.one/tx/${hash}`
 

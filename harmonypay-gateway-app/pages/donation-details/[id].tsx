@@ -10,16 +10,26 @@ import { getHarmonyExplorer } from '../../lib/utils'
 export default function Page (props: any) {
   const [ session, loading ] = useSession()
   const [ content , setContent ] = useState(props)
+  const [networkmode, setNetworkmode] = useState<string>()
+
   const router = useRouter()
   const { id } = router.query
+  if (id === undefined) return false
+
   // Fetch content from protected route
   useEffect(()=>{
+    const fetchNetworkmode = async () => {
+      const res = await fetch(`/api/v1/admin/settings/env`)
+      const json = await res.json()
+      if (json.data.networkMode) { setNetworkmode(json.data.networkMode) }
+    }
     const fetchData = async () => {
       const res = await fetch(`/api/v1/admin/donation/${id}`)
       const json = await res.json()
       //console.log(json)
       if (json.data) { setContent(json.data) }
     }
+    fetchNetworkmode()
     fetchData()
   },[session])
 
@@ -50,7 +60,7 @@ export default function Page (props: any) {
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">To Address</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <a href={getHarmonyExplorer('testnet','address',content.to_address)} target="_blank">
+            <a href={getHarmonyExplorer(networkmode,'address',content.to_address)} target="_blank">
               {content.to_address}
             </a>  
             </dd>
@@ -58,7 +68,7 @@ export default function Page (props: any) {
           <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
             <dt className="text-sm font-medium text-gray-500">From Address</dt>
             <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-            <a href={getHarmonyExplorer('testnet','address',content.from_address)} target="_blank">
+            <a href={getHarmonyExplorer(networkmode,'address',content.from_address)} target="_blank">
               {content.from_address}
             </a>  
             </dd>
