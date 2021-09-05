@@ -246,9 +246,10 @@ const min_settlement_binance = process.env.SETTLEMENT_BINANCE_MIN;
 
 cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
     console.log(`running a autosettlement task every six(${interval_check_settlement}) minutes`);
+
     //check binance settlements
     let pairs_binance = await getSettlementsPairsQuery('binance', 0);
-
+    console.log('binance pair - ', pairs_binance);
     pairs_binance.map(async pair_settle => {
             let binance_settlements = await getOpenSettlementsQuery('binance', pair_settle.settlement_pair, 0);
             //console.log(binance_settlements);
@@ -273,18 +274,18 @@ cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
             let accountBinance = await getPairBinanceAcountSummary(binance);
             if (parseFloat(accountBinance.free) < parseFloat(total_settlement)) {
                 console.log(`[!BINANCE] Balance available (${accountBinance.free} ONE) BELLOW settlement requirements (${total_settlement} ONE)`);
-                return false;
+                //return false;
             }
 
             if (usd_amount < parseFloat(min_settlement_binance)) {
                 console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements ${min_settlement_binance}USD)`);
-                return false;
+                //return false;
             }
 
 
             if (usd_amount < 11) {
                 console.log(`[!BINANCE] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements $11USD(binance))`);
-                return false;
+                //return false;
             }
 
 
@@ -313,7 +314,7 @@ cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
 
     //check cryptocom settlements
     let pairs_cryptocom = await getSettlementsPairsQuery('cryptocom', 0);
-    console.log(pairs_cryptocom);
+    console.log('cryptocom pair - ', pairs_cryptocom);
     pairs_cryptocom.map(async pair_settle => {
         let cryptocom_settlements = await getOpenSettlementsQuery('cryptocom', pair_settle.settlement_pair, 0);
 
@@ -342,17 +343,17 @@ cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
         let accountBalance = accountCryptocom.data.result.accounts[0].available;
         if (parseFloat(accountBalance) < parseFloat(total_settlement)) {
             console.log(`[!CRYPTO.COM] Balance available (${accountBalance} ONE) BELLOW settlement requirements (${total_settlement} ONE)`);
-            return false;
+            //return false;
         }
 
         if (usd_amount < parseFloat(min_settlement_cryptocom)) {
             console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements ${min_settlement_cryptocom}USD)`);
-            return false;
+            //return false;
         }
 
         if (usd_amount < 1) {
             console.log(`[!CRYPTO.COM] Settlement amount (${usd_amount} ${settlement_currency}) BELLOW settlement requirements $1USD)`);
-            return false;
+            //return false;
         }
 
         console.log(
