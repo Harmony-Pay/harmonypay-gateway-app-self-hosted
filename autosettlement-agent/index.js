@@ -8,6 +8,10 @@ const { CryptoApi, Currency } = require("node-crypto-com")
 
 const network_mode = process.env.NETWORK_MODE || 'testnet'
 
+const interval_check_settlement = process.env.SETTLEMENT_INTERVAL;
+const min_settlement_cryptocom = process.env.SETTLEMENT_CRYPTOCOM_MIN;
+const min_settlement_binance = process.env.SETTLEMENT_BINANCE_MIN;
+
 async function getOpenSettlementsQuery(exchange_id, settle_pair, status) {
 
     const result = await DB.pool.query(
@@ -383,16 +387,12 @@ async function checkCryptocomSettlements() {
 }
 
 
-const interval_check_settlement = process.env.SETTLEMENT_INTERVAL;
-const min_settlement_cryptocom = process.env.SETTLEMENT_CRYPTOCOM_MIN;
-const min_settlement_binance = process.env.SETTLEMENT_BINANCE_MIN;
-
 cron.schedule(`*/${interval_check_settlement} * * * *`, async() => {
     console.log(`running a autosettlement task every six(${interval_check_settlement}) minutes`);
     // check for binance settlements
-    await checkBinanceSettlements();
+    let binance_settlements = await checkBinanceSettlements();
     // check for cryptocom settlements
-    await checkCryptocomSettlements();
+    let cryptocom_settlements = await checkCryptocomSettlements();
 });
 
 console.info(`[${network_mode}] [Autosettlement Agent] Running every ${interval_check_settlement} minutes...`)
