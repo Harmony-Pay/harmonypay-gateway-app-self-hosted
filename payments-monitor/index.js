@@ -434,7 +434,7 @@ const getTransactionDetails = async(lastBlockNumber) => {
                                              //amountToWei(`${row.amount}`);
                                              //amountFromWei(`${transaction.value}`);
  
-                                             console.log('Number ==> ', Number(amountFromWei(`${transaction.value}`)).toFixed(2), Number(amountFromWei(amountToWei(`${row.amount}`))).toFixed(2), Number(amountFromWei(amountToWei(`${params.amount}`))).toFixed(2));
+                                             console.log('Number ==> ', Number(`${row.amount}`).toFixed(2), Number(`${params.amount}`).toFixed(2), Number(amountFromWei(`${transaction.value}`)).toFixed(2), Number(amountFromWei(amountToWei(`${row.amount}`))).toFixed(2), Number(amountFromWei(amountToWei(`${params.amount}`))).toFixed(2));
                                          }
  
                                      } else {
@@ -446,6 +446,7 @@ const getTransactionDetails = async(lastBlockNumber) => {
                                      }
  
                                      if (Number(amountFromWei(`${transaction.value}`)).toFixed(2) === Number(`${row.amount}`).toFixed(2) ||
+                                         Number(`${row.amount}`).toFixed(2) === Number(`${params.amount}`).toFixed(2) ||
                                          Number(amountFromWei(amountToWei(`${params.amount}`))).toFixed(2) === Number(`${row.amount}`).toFixed(2) ||
                                          Number(amountFromWei(amountToWei(`${params.amount}`))).toFixed(2) === Number(amountFromWei(amountToWei(`${row.amount}`))).toFixed(2)
                                      ) {

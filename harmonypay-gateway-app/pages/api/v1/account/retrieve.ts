@@ -128,7 +128,7 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextAp
   _rates.UNI = 1/parseFloat(cryptocurrency_rates.uniswap.usd)
   _rates.USDC = 1/parseFloat(cryptocurrency_rates['usd-coin'].usd)
   _rates.UST = 1/parseFloat(cryptocurrency_rates.terrausd.usd)
-  _rates.VINCI = 1/parseFloat(cryptocurrency_rates.harmony.usd)
+  _rates.VINCI = 1/parseFloat('0.10'/*cryptocurrency_rates.harmony.usd*/)
   _rates.WISE = 1/parseFloat(cryptocurrency_rates.harmony.usd)
   _rates.WONE = 1/parseFloat(cryptocurrency_rates.harmony.usd)
   _rates.FLR = 1/parseFloat(cryptocurrency_rates.harmony.usd)
