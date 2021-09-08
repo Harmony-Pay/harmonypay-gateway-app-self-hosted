@@ -3,6 +3,7 @@ import { useSession } from 'next-auth/client'
 import Layout from '../components/layout'
 import Link from "next/link"
 import AccessDenied from '../components/access-denied'
+import { ellipsisAddress } from '../lib/utils'
 
 
 export default function Page (props: any) {
@@ -93,7 +94,7 @@ export default function Page (props: any) {
                                     </td>
 
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{field.to_address.substr(0, 19)}...</div>
+                                        <div className="text-sm text-gray-900">{ellipsisAddress(field.to_address)}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={field.status

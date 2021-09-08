@@ -59,7 +59,7 @@ const execRatesQuery = async () => {
   
     return await axios.get(endpoint, {
       params: {
-        ids: 'harmony,bitcoin,ethereum,binancecoin,binance-usd',
+        ids: 'harmony,bitcoin,ethereum,binancecoin,chainlink,viper,dai,uniswap,aave,axie-infinity,binance-usd,usd-coin,sushi,havven,matic-network,terra-luna,terrausd',
         vs_currencies: 'gbp,usd,aud,eur,cad,rub,brl',
         include_last_updated_at: true,
       }
@@ -110,12 +110,28 @@ export default async (req: NextApiRequest, res: NextApiResponse): Promise<NextAp
   // Build exchange_rates prices
   let _rates: any = {};
   _rates.ONE = 1/parseFloat(cryptocurrency_rates.harmony.usd)
+  _rates.VIPER = 1/parseFloat(cryptocurrency_rates.viper.usd)
   _rates.ETH = 1/parseFloat(cryptocurrency_rates.ethereum.usd)
-  _rates.FLR = 1/parseFloat(cryptocurrency_rates.harmony.usd)
-  _rates.SRC = 1/parseFloat(cryptocurrency_rates.harmony.usd)
+  _rates.AAVE = 1/parseFloat(cryptocurrency_rates.aave.usd)
+  _rates.AXS = 1/parseFloat(cryptocurrency_rates['axie-infinity'].usd)
   _rates.BTC = 1/parseFloat(cryptocurrency_rates.bitcoin.usd)
   _rates.BNB = 1/parseFloat(cryptocurrency_rates.binancecoin.usd)
   _rates.BUSD = 1/parseFloat(cryptocurrency_rates['binance-usd'].usd)
+  _rates.DAI = 1/parseFloat(cryptocurrency_rates.dai.usd)
+  _rates.JEN = 1/parseFloat(cryptocurrency_rates.harmony.usd)
+  _rates.LINK = 1/parseFloat(cryptocurrency_rates.chainlink.usd)
+  _rates.LMA = 1/parseFloat(cryptocurrency_rates.harmony.usd)
+  _rates.LUNA = 1/parseFloat(cryptocurrency_rates['terra-luna'].usd)
+  _rates.MATIC = 1/parseFloat(cryptocurrency_rates['matic-network'].usd)
+  _rates.SNX = 1/parseFloat(cryptocurrency_rates.havven.usd)
+  _rates.SUSHI = 1/parseFloat(cryptocurrency_rates.sushi.usd)
+  _rates.UNI = 1/parseFloat(cryptocurrency_rates.uniswap.usd)
+  _rates.USDC = 1/parseFloat(cryptocurrency_rates['usd-coin'].usd)
+  _rates.UST = 1/parseFloat(cryptocurrency_rates.terrausd.usd)
+  _rates.VINCI = 1/parseFloat(cryptocurrency_rates.harmony.usd)
+  _rates.WISE = 1/parseFloat(cryptocurrency_rates.harmony.usd)
+  _rates.WONE = 1/parseFloat(cryptocurrency_rates.harmony.usd)
+  _rates.FLR = 1/parseFloat(cryptocurrency_rates.harmony.usd)
 
   const payments_used = await countOrdersQuery()
 

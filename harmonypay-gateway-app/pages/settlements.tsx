@@ -3,7 +3,7 @@ import { useSession } from 'next-auth/client'
 import Layout from '../components/layout'
 import Link from "next/link"
 import AccessDenied from '../components/access-denied'
-
+import { ellipsisAddress } from '../lib/utils'
 
 export default function Page (props: any) {
   const [ session, loading ] = useSession()
@@ -106,7 +106,7 @@ export default function Page (props: any) {
                     <td className="px-6 py-4 whitespace-nowrap">
                     <Link href={`/settlement-details/${field.id}`}>
                         <a href={`/settlement-details/${field.id}`}>
-                        <div className="text-sm text-gray-900">{field.to_address.substr(0, 19)}...</div>
+                        <div className="text-sm text-gray-900">{ellipsisAddress(field.to_address)}</div>
                         </a>
                     </Link>
                     </td>

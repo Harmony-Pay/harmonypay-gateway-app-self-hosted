@@ -5,7 +5,7 @@ import Layout from '../../components/layout'
 import Link from "next/link"
 import { useRouter } from 'next/router'
 import AccessDenied from '../../components/access-denied'
-import { covertFromWei, getHarmonyExplorer } from '../../lib/utils'
+import { covertFromWei, getHarmonyExplorer, ellipsisAddress } from '../../lib/utils'
 
 export default function Page (props: any) {
   const [ session, loading ] = useSession()
@@ -109,7 +109,7 @@ export default function Page (props: any) {
 
                 <td className="px-6 py-4 whitespace-nowrap">
                   <a href={getHarmonyExplorer(networkmode,'tx',field.hash)} target="_blank">
-                    <div className="text-sm text-blue-900">{field.hash.substr(0, 33)}...</div>
+                    <div className="text-sm text-blue-900">{ellipsisAddress(field.hash)}</div>
                   </a>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

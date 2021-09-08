@@ -103,7 +103,7 @@ export default function Page (props: any) {
                         <div className="flex-shrink-0 h-10 w-10">
                         <Link href={`/coin-details/${coin.id}`}>
                           <a href={`/coin-details/${coin.id}`}>
-                          <img className="h-10 w-10 rounded-full" src={coin.token_image ? coin.token_image : '/coins/ONE.png'} alt={coin.name} />
+                          <img className="h-10 w-10 rounded-full" src={coin.token_image ? coin.token_image : `/coins/${coin.symbol}.png`} alt={coin.name} />
                           </a>
                         </Link>
                         </div>

@@ -19,6 +19,14 @@ export function covertFromWei(value: string) {
     return web3utils.fromWei(value, 'ether')
 }
 
+export function ellipsisAddress(address: string){
+    if (!address || address.length < 10) {
+      return address
+    }
+    return address.slice(0, 6) + '...' + address.slice(address.length - 3, address.length)
+}
+
+
 export function getHarmonyExplorer(network_mode: string|undefined, kind: string, hash: string): string {
 
     if (kind === 'address') {
