@@ -7,8 +7,6 @@ const path = require('path');
 const { Harmony } = require('@harmony-js/core');
 const { ChainType, ChainID, Units, Unit, numberToString, add0xToString, fromWei, toWei, numToStr, isBech32TestNetAddress, isBech32Address } = require('@harmony-js/utils');
 const { fromBech32, toBech32, BN } = require('@harmony-js/crypto');
-
-
 dotenv.config();
 const network_mode = process.env.NETWORK_MODE || 'testnet'
 const http_api_url = network_mode === 'testnet' ? 'https://api.s0.b.hmny.io' : 'https://api.harmony.one';
