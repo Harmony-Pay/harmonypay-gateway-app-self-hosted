@@ -1,5 +1,8 @@
 #!/bin/bash
-
+clear
+echo "============================================"
+echo "HarmonyPay 0.1.1 Install and Setup Script"
+echo "============================================"
 # This script is used to install the full version of the application.
 # check if npm is installed
 FILE=`echo \`which npm\``
@@ -37,12 +40,20 @@ if [ "$MAXWATCHES" = "8192" ]; then
     sudo sysctl -p
 fi
 
+# Get ip address from the docker container
+CURRENTIP=`hostname -I | awk '{print $1}'`
+SERVERURL="http://$CURRENTIP:3033"
+SERVERURLAPI="http://$CURRENTIP:3033/api/v1"
+
 # Clone the repository and install dependancies
 echo "Cloning repository"
 git clone https://github.com/sekmet/harmonypay-gateway-app.git harmonypay
 cd harmonypay
 echo "Installing dependencies"
 cp ./utils/.env.sample .env
+echo "Updating server information..."
+perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" .env
+perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" .env
 npm install
 echo "Installing autosettlement agent dependencies"
 cd autosettlement-agent
@@ -55,6 +66,9 @@ cd ..
 echo "Installing harmonypay gateway app dependencies"
 cd harmonypay-gateway-app
 cp ../utils/.env.sample .env
+echo "Updating server information..."
+perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" .env
+perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" .env
 npm install
 cd ..
 echo "Building Harmonypay database"
