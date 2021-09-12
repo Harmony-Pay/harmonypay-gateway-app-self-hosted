@@ -314,7 +314,7 @@ async function insertSettlementQuery(order_id, order_info, transaction_id) {
 const getDonationDetails = async(transaction) => {
     
     let currency_wallet = await getWalletQuery('ONE');
-    if (currency_wallet.address === null) return false;
+    if (currency_wallet === null || currency_wallet.address === null) return false;
 
     convertOneToEthAddress(currency_wallet.address).then(async wallet_address => {
 
