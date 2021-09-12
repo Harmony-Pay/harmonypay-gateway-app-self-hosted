@@ -42,8 +42,8 @@ fi
 
 # Get ip address from the docker container
 CURRENTIP=`hostname -I | awk '{print $1}'`
-SERVERURL="http://$CURRENTIP:3033"
-SERVERURLAPI="http://$CURRENTIP:3033/api/v1"
+SERVERURL="http:\/\/$CURRENTIP:3033"
+SERVERURLAPI="http:\/\/$CURRENTIP:3033\/api\/v1"
 
 # Clone the repository and install dependancies
 echo "Cloning repository"
