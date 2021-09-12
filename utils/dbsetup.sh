@@ -8,6 +8,8 @@ if [ ! -f "$FILE" ]; then
 fi
 
 # pull postgres docker image / start postgres docker container
+docker stop harmonypay
+docker rm harmonypay
 echo "Installing and running postgres docker image..."
 docker pull postgres
 docker run --name harmonypay -e POSTGRES_PASSWORD=harmonypay -p 5432:5432 -d postgres
