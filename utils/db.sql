@@ -113,6 +113,6 @@ created_at TIMESTAMP default current_timestamp);
 CREATE INDEX idx_coin_id ON api.coins(id);
 CREATE INDEX idx_coin_name ON api.coins(name);
 
-INSERT INTO api.coins ('symbol','name','address_length','decimal_precision','token_group') VALUES ('ONE','Harmony ONE',42,18,'Main blockchains');
+INSERT INTO api.coins (symbol,name,address_length,decimal_precision,token_group) VALUES ('ONE','Harmony ONE',42,18,'Main blockchains');
 
 ALTER SYSTEM SET max_connections TO '999';
