@@ -42,6 +42,7 @@ fi
 
 # Get ip address from the docker container
 CURRENTIP=`hostname -I | awk '{print $1}'`
+SERVERSECRET=`openssl rand -hex 32 | awk '{print $1}'`
 SERVERURL="http:\/\/$CURRENTIP:3033"
 SERVERURLAPI="http:\/\/$CURRENTIP:3033\/api\/v1"
 
@@ -54,6 +55,7 @@ cp ./utils/.env.sample .env
 echo "Updating server information..."
 perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" .env
 perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" .env
+perl -pi -e "s/SERVER_SECRET/$SERVERSECRET/g" .env
 npm install
 echo "Installing autosettlement agent dependencies"
 cd autosettlement-agent
@@ -69,6 +71,7 @@ cp ../utils/.env.sample .env
 echo "Updating server information..."
 perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" .env
 perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" .env
+perl -pi -e "s/SERVER_SECRET/$SERVERSECRET/g" .env
 npm install
 cd ..
 echo "Building Harmonypay database"
