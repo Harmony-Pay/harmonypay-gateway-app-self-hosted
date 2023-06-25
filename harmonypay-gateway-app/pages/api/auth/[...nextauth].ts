@@ -1,5 +1,5 @@
 import NextAuth from "next-auth"
-import SessionProvider  from "next-auth/providers"
+import SessionProvider from "next-auth/providers"
 
 // Local auth
 const isAdminCredentials = (credentials: any) =>
@@ -11,7 +11,7 @@ const isAdminCredentials = (credentials: any) =>
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers
   providers: [
-    SessionProvider .Credentials({
+    SessionProvider.Credentials({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: "Credentials",
       // The credentials is used to generate a suitable form on the sign in page.
@@ -35,11 +35,11 @@ export default NextAuth({
         }
       },
     }),
-    /*SessionProvider .Email({
+    /*SessionProvider.Email({
       server: process.env.EMAIL_SERVER,
       from: process.env.EMAIL_FROM,
     }),
-    SessionProvider .Apple({
+    SessionProvider.Apple({
       clientId: process.env.APPLE_ID,
       clientSecret: {
         appleId: process.env.APPLE_ID,
@@ -48,26 +48,26 @@ export default NextAuth({
         keyId: process.env.APPLE_KEY_ID,
       },
     }),
-    SessionProvider .Auth0({
+    SessionProvider.Auth0({
       clientId: process.env.AUTH0_ID,
       clientSecret: process.env.AUTH0_SECRET,
       domain: process.env.AUTH0_DOMAIN,
     }),
-    SessionProvider .Facebook({
+    SessionProvider.Facebook({
       clientId: process.env.FACEBOOK_ID,
       clientSecret: process.env.FACEBOOK_SECRET,
     }),
-    SessionProvider .GitHub({
+    SessionProvider.GitHub({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
       // https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
       scope: "read:user",
     }),
-    SessionProvider .Google({
+    SessionProvider.Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
-    SessionProvider .Twitter({
+    SessionProvider.Twitter({
       clientId: process.env.TWITTER_ID,
       clientSecret: process.env.TWITTER_SECRET,
     }),*/
