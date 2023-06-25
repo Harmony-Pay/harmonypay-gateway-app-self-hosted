@@ -55,13 +55,13 @@ export default function Header() {
           {session && (
             <>
               <span
-                style={{ backgroundImage: `url(${session.user.image})` }}
+                style={{ backgroundImage: `url(${session.user?.image || ''})` }}
                 className={styles.avatar}
               />
               <span className={styles.signedInText}>
                 <small>Logged as</small>
                 <br />
-                <strong>{session.user.email || session.user.name}</strong>
+                <strong>{session.user?.email || session.user?.name || ''}</strong>
               </span>
               <a
                 href={`/api/auth/signout`}
@@ -94,7 +94,7 @@ export default function Header() {
                style={{outline: 'none'}}>
                <div className="flex flex-grow"><svg className="flex-shrink-0 h-6 w-6 mr-1" viewBox="0 0 24 24">
                    <path className="fill-current text-gray-400 text-indigo-500"
-                     d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm1 18h-2v-2h2v2zm2-7h-4V7h2a2 2 0 0 1 2 2v2z" />
+                     d="M12 0C5.383 0 0 5.383 0 12s5.383 12 12 12 12-5.383 12-12S18.617 0 12 0zm0 2c1.85 0 3.583.637 4.95 1.7l-1.4 1.4A7.947 7.947 0 0 0 12 4c-4.411 0-8 3.589-8 8s3.589 8 8 8 8-3.589 8-8a7.96 7.96 0 0 0-1.088-4.009l1.638-1.285A9.943 9.943 0 0 1 22 12c0 5.514-4.486 10-10 10S2 17.514 2 12 6.486 2 12 2zm1 16h-2v-2h2v2zm2-7h-4V7h2a2 2 0 0 1 2 2v2z" />
                </svg>
                <span className="flex-grow">Dashboard</span>
               </div>
