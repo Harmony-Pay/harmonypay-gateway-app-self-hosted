@@ -5,11 +5,11 @@ import "./custom.css"
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <Provider
+    <SessionProvider
       session={pageProps.session}
     >
       <Component {...pageProps} />
-    </Provider>
+    </SessionProvider>
   )
 }
 
