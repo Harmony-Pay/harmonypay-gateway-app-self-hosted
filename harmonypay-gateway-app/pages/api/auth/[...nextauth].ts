@@ -1,5 +1,5 @@
 import NextAuth from "next-auth"
-import SessionProvider from "next-auth/providers"
+import CredentialsProvider from "next-auth/providers/credentials"
 
 // Local auth
 const isAdminCredentials = (credentials: any) =>
@@ -11,7 +11,7 @@ const isAdminCredentials = (credentials: any) =>
 export default NextAuth({
   // https://next-auth.js.org/configuration/providers
   providers: [
-    SessionProvider.Credentials({
+    CredentialsProvider({
       // The name to display on the sign in form (e.g. 'Sign in with...')
       name: "Credentials",
       // The credentials is used to generate a suitable form on the sign in page.
