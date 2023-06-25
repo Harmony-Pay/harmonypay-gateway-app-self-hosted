@@ -1,4 +1,4 @@
-import { Provider } from "next-auth/client"
+import { Provider } from "next-auth/react"
 import type { AppProps } from "next/app"
 import "./styles.css"
 import "./custom.css"
