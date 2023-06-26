@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { JWT } from 'next-auth/jwt'
+
 
 // Local auth
 const isAdminCredentials = (credentials: any) =>
@@ -64,11 +64,11 @@ export default NextAuth({
       // https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
       scope: "read:user",
     }),*/
-    SessionProvider.Google({
+    Provider.Google({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
-    SessionProvider.Twitter({
+    Provider.Twitter({
       clientId: process.env.TWITTER_ID,
       clientSecret: process.env.TWITTER_SECRET,
     }),
