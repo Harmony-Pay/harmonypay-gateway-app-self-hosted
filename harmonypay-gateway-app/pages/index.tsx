@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Layout from '../components/layout'
-import { signIn } from 'next-auth/client'
-import { useSession } from 'next-auth/client'
+import { signIn } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 //import AccessDenied from '../components/access-denied'
 import WelcomeBanner from '../components/welcome-banner'
 import settingsEnv from '../lib/envfile'
@@ -18,7 +18,8 @@ export async function getStaticProps() {
 }
 
 export default function Page (props: any) {
-  const [ session, loading ] = useSession()
+  const { data: session, status } = useSession()
+  const loading = status === "loading"
   //const [ content , setContent ] = useState()
 
   // Fetch content from protected route
