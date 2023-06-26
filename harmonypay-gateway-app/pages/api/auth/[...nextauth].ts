@@ -3,7 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import TwitterProvider from "next-auth/providers/twitter"
 import { getToken } from "next-auth/jwt"
-import { TypeORMLegacyAdapter } from "next-auth/typeorm-legacy-adapter"
+import { TypeORMLegacyAdapter } from "@next-auth/typeorm-legacy-adapter"
 
 // Local auth
 const isAdminCredentials = (credentials: any) =>
