@@ -1,6 +1,7 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-
+import GoogleProvider from "next-auth/providers/google"
+import TwitterProvider from "next-auth/providers/twitter"
 
 // Local auth
 const isAdminCredentials = (credentials: any) =>
@@ -64,11 +65,11 @@ export default NextAuth({
       // https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
       scope: "read:user",
     }),*/
-    Provider.Google({
+    GoogleProvider({
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
     }),
-    Provider.Twitter({
+    TwitterProvider({
       clientId: process.env.TWITTER_ID,
       clientSecret: process.env.TWITTER_SECRET,
     }),
