@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from "axios";
-import { useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/react'
 import Layout from '../components/layout'
 import Link from "next/link"
 import { useRouter } from 'next/router'
@@ -32,7 +32,8 @@ const confirmRemove = async (id: any, router: any) => {
 
 
 export default function Page (props: any) {
-  const [ session, loading ] = useSession()
+  const { data: session, status } = useSession()
+  const loading = status === "loading"
   const [ content , setContent ] = useState(new Array())
   const router = useRouter()
   // Fetch content from protected route
