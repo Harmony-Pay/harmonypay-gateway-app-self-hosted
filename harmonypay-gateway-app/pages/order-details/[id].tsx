@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/react'
 import dayjs from 'dayjs'
 import Layout from '../../components/layout'
 import Link from "next/link"
@@ -8,7 +8,8 @@ import AccessDenied from '../../components/access-denied'
 import { covertFromWei, getHarmonyExplorer, ellipsisAddress } from '../../lib/utils'
 
 export default function Page (props: any) {
-  const [ session, loading ] = useSession()
+  const { data: session, status } = useSession()
+  const loading = status === "loading"
   const [ content , setContent ] = useState(props)
   const [networkmode, setNetworkmode] = useState()
 
