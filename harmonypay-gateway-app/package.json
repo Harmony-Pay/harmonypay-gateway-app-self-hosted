@@ -23,6 +23,7 @@
   "dependencies": {
     "@headlessui/react": "^1.4.0",
     "@heroicons/react": "^1.0.3",
+    "@next-auth/typeorm-legacy-adapter": "^2.0.2",
     "@tailwindcss/forms": "^0.3.3",
     "axios": "^0.21.1",
     "crypto-js": "^4.1.1",
