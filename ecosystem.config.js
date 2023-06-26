@@ -3,7 +3,7 @@ module.exports = {
         {
             name: 'harmonypay-gateway-app',
             script: './harmonypay-gateway-app/node_modules/next/dist/bin/next',
-            args: 'start -H 0.0.0.0 -p 3033',
+            args: 'start -H harmonypay.thinkincoin.com -p 3033',
             cwd: './harmonypay-gateway-app',
             watch: ["."],
             // Delay between restart
