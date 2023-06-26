@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
+import { JWT } from 'next-auth/jwt'
 
 // Local auth
 const isAdminCredentials = (credentials: any) =>
