@@ -3,7 +3,7 @@ module.exports = {
         {
             name: 'harmonypay-gateway-app',
             script: './harmonypay-gateway-app/node_modules/next/dist/bin/next',
-            args: 'dev -H 10.128.0.3 -p 3033',
+            args: 'dev -H 0.0.0.0 -p 3033',
             cwd: './harmonypay-gateway-app',
         },
         {
