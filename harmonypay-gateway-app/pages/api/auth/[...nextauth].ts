@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import TwitterProvider from "next-auth/providers/twitter"
 import { getToken } from "next-auth/jwt"
+import { TypeORMLegacyAdapter } from "@next-auth/typeorm-legacy-adapter"
 
 // Local auth
 const isAdminCredentials = (credentials: any) =>
@@ -81,7 +82,7 @@ export default NextAuth({
   // Notes:
   // * You must install an appropriate node_module for your database
   // * The Email provider requires a database (OAuth providers do not)
-  database: process.env.DATABASE_URL,
+  adapter: TypeORMLegacyAdapter("process.env.DATABASE_URL") ,
 
   // The secret should be set to a reasonably long random string.
   // It is used to sign cookies and to sign and encrypt JSON Web Tokens, unless
