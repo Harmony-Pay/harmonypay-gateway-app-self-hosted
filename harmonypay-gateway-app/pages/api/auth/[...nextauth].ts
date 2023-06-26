@@ -2,6 +2,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import GoogleProvider from "next-auth/providers/google"
 import TwitterProvider from "next-auth/providers/twitter"
+import { getToken } from "next-auth/jwt"
 
 // Local auth
 const isAdminCredentials = (credentials: any) =>
