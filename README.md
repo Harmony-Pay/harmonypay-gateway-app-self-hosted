@@ -89,13 +89,13 @@ yarn install
 ### 2. Run development enviroment
 
 ```sh
-yarn run dev
+yarn dev
 ```
 
 ### Or production enviroment
 
 ```sh
-yarn run start
+yarn start
 ```
 
 ## License
