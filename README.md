@@ -87,24 +87,24 @@ yarn install
 ```
 Install Gateway (from app dir): 
 ```sh
-cd ./hamonypay/harmonypay-gateway-app
+cd ./harmonypay-gateway-app
 yarn install
 
 ```
 Install Monitror (from app dir): 
 ```sh
-cd ./harmonypay/payments-monitor
+cd ./payments-monitor
 yarn install
 ```
 Install Auto Settlement (from app dir): 
 ```sh
-cd autosettlement-agent
+cd ./autosettlement-agent
 yarn install
 ```
 Load .env files (from app dir): 
 ```sh
-cp ./harmonypay/utils/.env.sample ../.env
-cp ./harmonypay/utils/.env.sample ../harmonypay-gateway-app/.env
+cp ./utils/.env.sample .
+cp ./utils/.env.sample ./harmonypay-gateway-app/.env
 ```
 
 OPTIONAL: add server data on .env files: 
