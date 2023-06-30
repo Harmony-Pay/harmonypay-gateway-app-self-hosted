@@ -93,6 +93,11 @@ Use the following command to set up the repository:
   "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 ```
+Than install using: 
+```sh
+snap install docker     # version 20.10.24, or
+apt  install docker.io  # version 20.10.21-0ubuntu1~20.04.2
+```
 
 ### 1. Clone the repository and install app
 
