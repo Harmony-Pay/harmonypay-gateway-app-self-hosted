@@ -107,6 +107,10 @@ Load .env files (from app dir):
 cp ./utils/.env.sample .env
 cp ./utils/.env.sample ./harmonypay-gateway-app/.env
 ```
+Setup database:
+```sh
+sh ./utils/dbsetup.sh
+```
 
 OPTIONAL: add server data on .env files: 
 ```
