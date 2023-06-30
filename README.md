@@ -114,11 +114,11 @@ CURRENTIP=`hostname -I | awk '{print $1}'`
 SERVERURL="http:\/\/$CURRENTIP:3033"
 SERVERURLAPI="http:\/\/$CURRENTIP:3033\/api\/v1"
 
-perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" ../.env
-perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" ../.env
+perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" ./.env
+perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" ./.env
 
-perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" ../harmonypay-gateway-app/.env
-perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" ../harmonypay-gateway-app/.env
+perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" ./harmonypay-gateway-app/.env
+perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" ./harmonypay-gateway-app/.env
 ```
 
 ### 2. Run development enviroment
