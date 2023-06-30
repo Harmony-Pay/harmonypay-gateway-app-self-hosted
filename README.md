@@ -65,29 +65,37 @@ HarmonyPay is an easy to implement, cryptocurrency payment gateway for WooCommer
 
 # Usage and installation
 
+### 0. Instal YARN if you dont have installed yet (script for ubuntu 20.04) 
+```
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+sudo apt update && sudo apt install yarn
+```
+
 ### 1. Clone the repository and install dependancies
 
-```
+```sh
 git clone https://github.com/sekmet/harmonypay-gateway-app.git
 cd harmonypay-gateway-app
-npm install
+```
+
+Install HarmonyPay: 
+```sh
+yarn add pm2 --global
+yarn install
 ```
 
 ### 2. Run development enviroment
 
 ```sh
-npm run dev
+yarn run dev
 ```
 
 ### Or production enviroment
 
-*Install pm2*
 ```sh
-npm install -g pm2
-```
-
-```sh
-npm run start
+yarn run start
 ```
 
 ## License
