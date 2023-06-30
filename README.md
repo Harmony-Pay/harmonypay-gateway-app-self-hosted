@@ -82,7 +82,8 @@ cd harmonypay
 
 Install HarmonyPay: 
 ```sh
-yarn add pm2 --global
+yarn add pm2 @types/react --global /
+&& yarn add --dev @types/react
 yarn install
 ```
 Install Gateway (from app dir): 
