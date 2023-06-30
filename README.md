@@ -103,7 +103,7 @@ yarn install
 ```
 Load .env files (from app dir): 
 ```sh
-cp ./utils/.env.sample .
+cp ./utils/.env.sample .env
 cp ./utils/.env.sample ./harmonypay-gateway-app/.env
 ```
 
