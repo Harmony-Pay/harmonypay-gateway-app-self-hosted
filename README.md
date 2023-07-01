@@ -65,29 +65,103 @@ HarmonyPay is an easy to implement, cryptocurrency payment gateway for WooCommer
 
 # Usage and installation
 
-### 1. Clone the repository and install dependancies
+### Preparation:
+## Instal YARN if you dont have installed yet (script for ubuntu 20.04) 
+```
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+sudo apt update && sudo apt install yarn
+```
+## Install Docker packages by apt
+
+Update the apt package index and install packages to allow apt to use a repository over HTTPS:
+```sh
+ sudo apt-get update
+ sudo apt-get install ca-certificates curl gnupg
+```
+Add Docker’s official GPG key:
+```sh
+ sudo install -m 0755 -d /etc/apt/keyrings
+ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+ sudo chmod a+r /etc/apt/keyrings/docker.gpg
+```
+Use the following command to set up the repository:
+```sh
+ echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+Than install using: 
+```sh
+snap install docker     # version 20.10.24, or
+apt  install docker.io  # version 20.10.21-0ubuntu1~20.04.2
+```
+
+### 1. Clone the repository and install app
+
+```sh
+git clone https://github.com/thinkincoin/harmonypay.git
+cd harmonypay
+```
+
+Install HarmonyPay: 
+```sh
+yarn add pm2 @types/react --global /
+&& yarn add --dev @types/react
+yarn install
+```
+Install Gateway (from app dir): 
+```sh
+cd ./harmonypay-gateway-app
+yarn install && yarn add --dev @types/react
 
 ```
-git clone https://github.com/sekmet/harmonypay-gateway-app.git
-cd harmonypay-gateway-app
-npm install
+Install Monitror (from app dir): 
+```sh
+cd ./payments-monitor
+yarn install
+```
+Install Auto Settlement (from app dir): 
+```sh
+cd ./autosettlement-agent
+yarn install
+```
+Load .env files (from app dir): 
+```sh
+cp ./utils/.env.sample .env
+cp ./utils/.env.sample ./harmonypay-gateway-app/.env
+```
+Setup database:
+```sh
+sh ./utils/dbsetup.sh
+```
+
+OPTIONAL: add server data on .env files: 
+```
+# Get ip address
+CURRENTIP=`hostname -I | awk '{print $1}'`
+SERVERURL="http:\/\/$CURRENTIP:3033"
+SERVERURLAPI="http:\/\/$CURRENTIP:3033\/api\/v1"
+
+perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" ./.env
+perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" ./.env
+
+perl -pi -e "s/SERVER_URL_API/$SERVERURLAPI/g" ./harmonypay-gateway-app/.env
+perl -pi -e "s/SERVER_URL_NEXTAUTH/$SERVERURL/g" ./harmonypay-gateway-app/.env
 ```
 
 ### 2. Run development enviroment
 
 ```sh
-npm run dev
+yarn dev
 ```
 
 ### Or production enviroment
 
-*Install pm2*
 ```sh
-npm install -g pm2
-```
-
-```sh
-npm run start
+yarn start
 ```
 
 ## License
