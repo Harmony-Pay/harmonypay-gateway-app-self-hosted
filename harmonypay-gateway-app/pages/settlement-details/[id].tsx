@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/react'
 import dayjs from 'dayjs'
 import Link from "next/link"
 import Layout from '../../components/layout'
@@ -9,7 +9,8 @@ import { getHarmonyExplorer } from '../../lib/utils'
 //import { PaperClipIcon } from '@heroicons/react/solid'
 
 export default function Page (props: any) {
-  const [ session, loading ] = useSession()
+  const { data: session, status } = useSession()
+  const loading = status === "loading"
   const [ content , setContent ] = useState(props)
   const [networkmode, setNetworkmode] = useState()
 

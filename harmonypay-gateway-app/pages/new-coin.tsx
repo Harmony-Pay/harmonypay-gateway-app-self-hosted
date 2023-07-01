@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
-import { useSession } from 'next-auth/client'
+import { useSession } from 'next-auth/react'
 import Layout from '../components/layout'
 import { useRouter } from 'next/router'
 import FormCoin from '../components/forms/form-coin'
 import AccessDenied from '../components/access-denied'
 
 export default function Page (props: any) {
-  const [ session, loading ] = useSession()
+  const { data: session, status } = useSession()
+  const loading = status === "loading"
   const [ content , setContent ] = useState(props)
   const router = useRouter()
   const { id } = router.query
