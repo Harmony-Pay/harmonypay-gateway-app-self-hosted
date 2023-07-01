@@ -115,7 +115,7 @@ yarn install
 Install Gateway (from app dir): 
 ```sh
 cd ./harmonypay-gateway-app
-yarn install
+yarn install && yarn add --dev @types/react
 
 ```
 Install Monitror (from app dir): 
